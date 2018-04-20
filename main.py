@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 from irrigationTimer import Valve
 from timer_socket import socket_connection
 import RPi.GPIO as GPIO
