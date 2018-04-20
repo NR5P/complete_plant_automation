@@ -1,0 +1,4 @@
+*.pyc
+valve*
+RPi/
+__pycache__/
