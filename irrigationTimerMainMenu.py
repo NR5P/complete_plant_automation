@@ -26,20 +26,20 @@ def mainMenu(conn):
     while True:
         displayMainMenu(conn)
         conn.send(str.encode("\nenter: "))
-        mainMenuInput = int(conn.recv(1024).decode("utf-8"))
-        if mainMenuInput == 1:
+        mainMenuInput = str(conn.recv(1024).decode("utf-8"))
+        if mainMenuInput == "1":
             showValvesRunning(conn)
-        elif mainMenuInput == 2:
+        elif mainMenuInput == "2":
             showValvesOn(conn)
-        elif mainMenuInput == 3:
+        elif mainMenuInput == "3":
             showValveTimes(conn)
-        elif mainMenuInput == 4:
+        elif mainMenuInput == "4":
             displayAllSettings(conn)
-        elif mainMenuInput == 5:
+        elif mainMenuInput == "5":
             mainMenuEditValve(conn)
-        elif mainMenuInput == 6:
+        elif mainMenuInput == "6":
             showCurrentTimeDate()
-        elif mainMenuInput == 7:
+        elif mainMenuInput == "7":
             changeDate()
         else:
             conn.send(str.encode("please enter a valid input!!!"))
@@ -106,28 +106,28 @@ def mainMenuEditValve(conn):
 11. back to main menu
     """))
     conn.send(str.encode("enter: "))
-    answer = int(conn.recv(1024).decode("utf-8"))
-    if answer == 1:
+    answer = str(conn.recv(1024).decode("utf-8"))
+    if answer == "1":
         setOnOff(conn, valveAnswer)
-    elif answer == 2:
+    elif answer == "2":
         setDays(conn, valveAnswer)
-    elif answer == 3:
+    elif answer == "3":
         setTimes(conn, valveAnswer)
-    elif answer == 4:
+    elif answer == "4":
         setDuration(conn, valveAnswer)
-    elif answer == 5:
+    elif answer == "5":
         setCycleOn(conn, valveAnswer)
-    elif answer == 6:
+    elif answer == "6":
         setCycleOff(conn, valveAnswer)
-    elif answer == 7:
+    elif answer == "7":
         setBlackoutStart(conn, valveAnswer)
-    elif answer == 8:
+    elif answer == "8":
         setBlackoutStop(conn, valveAnswer)
-    elif answer == 9:
+    elif answer == "9":
         resetValve(conn, valveAnswer)
-    elif answer == 10:
+    elif answer == "10":
         cycleOrIrrigate(conn, valveAnswer)
-    elif answer == 11:
+    elif answer == "11":
         mainMenu()
     else:
         conn.send(str.encode("enter valid input"))
