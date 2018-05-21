@@ -7,18 +7,6 @@ ScreenManagement:
 <Button>:
     background_color: 0, 0, 1, 1
     font_size: 40
-#<IrrigationGUI>:
-#    padding: 10
-#    rows: 4
-#    spacing: 10
-#    Button:
-#        text: "settings"
-#    Button:
-#        text: "Main"
-#    Button:
-#        text: "Lights"
-#    Button:
-#        text: "Valves"
 
 <MainScreen>:
     GridLayout:
@@ -28,7 +16,7 @@ ScreenManagement:
         spacing: 10
         Button:
             on_release: app.root.current = "settings"
-            text: "settings"
+            text: "Settings"
         Button:
             on_release: app.root.current = "lights"
             text: "Lights"
