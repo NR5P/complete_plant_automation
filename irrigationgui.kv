@@ -1,4 +1,4 @@
-ScreenManagement:
+ScreenManager:
     MainScreen: 
     LightsScreen:
     ValvesScreen:
@@ -10,22 +10,20 @@ ScreenManagement:
 
 <MainScreen>:
     GridLayout:
-        name: "main"
         padding: 10
         rows: 4
         spacing: 10
         Button:
-            on_release: app.root.current = "settings"
+            on_press: root.manager.current = "settings"
             text: "Settings"
         Button:
-            on_release: app.root.current = "lights"
+            on_press: root.manager.current = "lights"
             text: "Lights"
         Button:
-            on_release: app.root.current = "valves"
+            on_press: root.manager.current = "valves"
             text: "Valves"
 <SettingsScreen>:
     GridLayout:
-        name: "settings"
         padding: 10
         rows: 2
         spacing: 10
@@ -34,7 +32,6 @@ ScreenManagement:
 
 <LightsScreen>:
     GridLayout:
-        name: "lights"
         padding: 10
         cols: 2
         spacing: 10
@@ -57,7 +54,6 @@ ScreenManagement:
 
 <ValvesScreen>:
     GridLayout:
-        name: "valves"
         padding: 10
         cols: 1
         spacing: 10
