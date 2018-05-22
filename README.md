@@ -1,4 +1,4 @@
-#Complete Plant Automation
+# Complete Plant Automation
 A project to be able allow complete automation of growing plants using the raspberry pi. Irrigation, grow lights, temperature control, and more. Multi platform apps to allow control over wifi network. Temperature, humidity, and other feedback to allow monitoring.
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
