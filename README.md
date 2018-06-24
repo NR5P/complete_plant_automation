@@ -24,7 +24,7 @@ I also wanted greater functionality as I had normal garden irrigation needs and 
 - [x] general program finished
 - [x] plant irrigation valve timers
 - [ ] lights timer
-- [ ] gui kivy application
+- [ ] gui 
 - [x] network socket control over terminal
 - [ ] temperature sensor capability
 - [ ] humidity sensor capability
