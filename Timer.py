@@ -11,7 +11,6 @@ class Timer():
         self.on = False
         self.test = False
         self.currentStateOn = False
-
         self.save()
         self.threadStart()
 

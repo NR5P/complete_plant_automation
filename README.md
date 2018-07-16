@@ -20,6 +20,9 @@ I decided to pursue this project because I was propagating plants and was using 
 
 I also wanted greater functionality as I had normal garden irrigation needs and I had tropical plants that needed to grow in doors with grow lights. I wanted a do it all timer that I could continue to add options to and was a single unit. I also wanted to build something open source that anyone could modify according to their needs. 
 
+## gui
+I'm using java swing for building the gui. Android app will come later. I started out learning Kivy hoping for an easy cross platform experience. As this was my first time dealing with building a gui it seemed easier to me to utilize swing instead. 
+
 ## progress
 - [x] general program finished
 - [x] plant irrigation valve timers
