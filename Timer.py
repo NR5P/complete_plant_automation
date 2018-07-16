@@ -31,7 +31,11 @@ class Timer():
         pickle.dump(self, file)
         file.close()
 
-    def threadStart(self):
-        t = threading.Thread(target=self.run)
-        t.start()
+    #def threadStart(self):
+    #    t = threading.Thread(target=self.run)
+    #    t.start()
+
+    def run(self):
+        for i in Timer.timerList:
+            i.run()
 

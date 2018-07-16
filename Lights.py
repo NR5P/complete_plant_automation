@@ -11,16 +11,17 @@ class Lights(Timer):
         self.time_off = None
 
     def run(self):
-        while True:
-            time.sleep(.1)
-            if self.test == "on":
-                GPIO.output(self.pin, True)
-            if self.onOff == "on":
-                if self.time_on is not None and self.time_off is not None:
-                    now = datetime.datetime.now()
-                    on_time_today = now.replace(self.time_on)
-                    off_time_today = now.replace(self.time_off)
-                    if now > on_time_today and now < off_time_today:
-                        self.on = False
-                    else:
-                        self.on = False
+        time.sleep(.1)
+        if self.test:
+            GPIO.output(self.pin, True)
+        if self.on:
+            if self.time_on is not None and self.time_off is not None:
+                now = datetime.datetime.now()
+                on_time_today = now.replace(self.time_on)
+                off_time_today = now.replace(self.time_off)
+                if now > on_time_today and now < off_time_today:
+                    self.on = True
+                else:
+                    self.on = False
+        else:
+            GPIO.output(self.pin, False)
