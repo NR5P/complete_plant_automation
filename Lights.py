@@ -2,13 +2,22 @@ import Timer
 import datetime
 import time
 import RPi.GPIO as GPIO
+import pickle
 
 
 class Lights(Timer):
+    lightsList = []
+
     def __init__(self, pin, name):
         super().__init__(pin, name)
         self.time_on = None
         self.time_off = None
+
+        try:
+            self.load()
+        except:
+            self.save()
+
 
     def run(self):
         time.sleep(.1)

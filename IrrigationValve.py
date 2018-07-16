@@ -2,9 +2,12 @@ import Timer
 import datetime
 import RPi.GPIO as GPIO
 import time
+import pickle
 
 
 class IrrigationValve(Timer):
+    valveList = []
+
     def __init__(self, pin, name):
         super().__init__(pin, name)
 
@@ -15,6 +18,12 @@ class IrrigationValve(Timer):
         self.blackoutStart = None
         self.blackoutStop = None
         self.days = set()
+
+        try:
+            self.load()
+        except:
+            self.save()
+
 
     def run(self):
         time.sleep(.1)
