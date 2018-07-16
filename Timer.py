@@ -3,6 +3,7 @@ import threading
 
 
 class Timer():
+    test = "test text"
     timerList = []
 
     def __init__(self, pin, name):

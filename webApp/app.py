@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from Timer import Timer
 
 
 app = Flask(__name__)
@@ -10,7 +11,7 @@ def index():
 
 @app.route("/valves")
 def irrigationValve():
-    return render_template("valves.html")
+    return render_template("valves.html", Timer=Timer)
 
 @app.route("/lights")
 def lights():
