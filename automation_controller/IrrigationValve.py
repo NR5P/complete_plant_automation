@@ -1,4 +1,4 @@
-import Timer
+from automation_controller.Timer import Timer
 import datetime
 import RPi.GPIO as GPIO
 import time
@@ -18,6 +18,9 @@ class IrrigationValve(Timer):
         self.blackoutStart = None
         self.blackoutStop = None
         self.days = set()
+        Timer.timer_list.append(self)
+        IrrigationValve.valveList.append(self)
+
 
         try:
             self.load()

@@ -4,6 +4,7 @@ import pickle
 
 class Timer():
     test = "test text" #TODO delete this later, this is just a test
+    timer_list = []
 
     def __init__(self, pin, name):
         self.name = name
@@ -13,7 +14,6 @@ class Timer():
         self.currentStateOn = False
         self.save()
         #self.threadStart()
-
 
     def __str__(self):
         return self.name
@@ -33,7 +33,9 @@ class Timer():
     #    t = threading.Thread(target=self.run)
     #    t.start()
 
-    def run(self):
-        for i in Timer.timerList:
-            i.run()
+    @staticmethod
+    def run():
+        while True:
+            for i in Timer.timer_list:
+                i.run()
 

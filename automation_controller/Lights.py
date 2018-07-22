@@ -1,4 +1,4 @@
-import Timer
+from automation_controller.Timer import Timer
 import datetime
 import time
 import RPi.GPIO as GPIO
@@ -12,6 +12,8 @@ class Lights(Timer):
         super().__init__(pin, name)
         self.time_on = None
         self.time_off = None
+        Timer.timer_list.append(self)
+        Lights.lightsList.append(self)
 
         try:
             self.load()
