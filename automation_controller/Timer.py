@@ -3,7 +3,6 @@ import pickle
 
 
 class Timer():
-    test = "test text" #TODO delete this later, this is just a test
     timer_list = []
 
     def __init__(self, pin, name):

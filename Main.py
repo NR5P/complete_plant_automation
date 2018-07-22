@@ -45,8 +45,8 @@ def main():
     threadingStart()
 
 def threadingStart():
-    timerThread = threading.Thread(target=Timer.run())
-    appThread = threading.Thread(target=app.run())
+    timerThread = threading.Thread(target=Timer.run)
+    appThread = threading.Thread(target=app.run)
 
     timerThread.start()
     appThread.start()

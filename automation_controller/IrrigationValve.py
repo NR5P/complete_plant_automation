@@ -8,6 +8,8 @@ import pickle
 class IrrigationValve(Timer):
     valveList = []
 
+    test = "some testing text"
+
     def __init__(self, pin, name):
         super().__init__(pin, name)
 
