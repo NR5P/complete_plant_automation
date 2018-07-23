@@ -1,5 +1,5 @@
 from automation_controller.Timer import Timer
-from webApp.app import app
+from webApp import app
 import threading
 from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.Lights import Lights
@@ -46,7 +46,7 @@ def main():
 
 def threadingStart():
     timerThread = threading.Thread(target=Timer.run)
-    appThread = threading.Thread(target=app.run)
+    appThread = threading.Thread(target=app.startApp)
 
     timerThread.start()
     appThread.start()

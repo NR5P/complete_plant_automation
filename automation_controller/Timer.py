@@ -1,6 +1,4 @@
 import pickle
-#import threading
-
 
 class Timer():
     timer_list = []
@@ -12,7 +10,6 @@ class Timer():
         self.test = False
         self.currentStateOn = False
         self.save()
-        #self.threadStart()
 
     def __str__(self):
         return self.name
@@ -27,10 +24,6 @@ class Timer():
         f = open(self.name, "rb")
         self = pickle.load(f)
         f.close()
-
-    #def threadStart(self):
-    #    t = threading.Thread(target=self.run)
-    #    t.start()
 
     @staticmethod
     def run():
