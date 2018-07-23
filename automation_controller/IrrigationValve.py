@@ -29,7 +29,6 @@ class IrrigationValve(Timer):
         except:
             self.save()
 
-
     def run(self):
         time.sleep(.1)
         if self.test:
