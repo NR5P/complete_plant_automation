@@ -33,7 +33,7 @@ which will return the gui in the web browser.
 - [ ] temperature sensor capability
 - [ ] humidity sensor capability
 
-##problems
+## problems
 I'm thinking about the best way for a user to add the controller to their network, I can only think of two ways
 of doing this
 - by adding an lcd or touchscreen to the raspberry pi to add wifi password

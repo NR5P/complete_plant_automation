@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import sys
 from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.Timer import Timer
@@ -24,6 +24,11 @@ def index():
 @app.route("/valves")
 def irrigationValve():
     return render_template("valves.html", IrrigationValve=IrrigationValve)
+
+#@app.route("/send", methods=["GET", "POST"])
+#def send():
+#    if request.method == "POST":
+#        pass
 
 @app.route("/lights")
 def lights():
