@@ -4,10 +4,12 @@ from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.Timer import Timer
 from automation_controller.Lights import Lights
 from .jinja_filters import *
+from webApp.forms import ValveForm
 sys.path.append("/home/this/programming/complete_plant_automation/automation_controller")
 sys.path.append("/home/this/programming/complete_plant_automation")
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "thisisasecretkey"
 
 
 app.jinja_env.filters["strftimeConverter"] = strf_time_converter
@@ -23,7 +25,8 @@ def index():
 
 @app.route("/valves")
 def irrigationValve():
-    return render_template("valves.html", IrrigationValve=IrrigationValve)
+    form = ValveForm()
+    return render_template("valves.html", IrrigationValve=IrrigationValve, form=form)
 
 #@app.route("/send", methods=["GET", "POST"])
 #def send():
