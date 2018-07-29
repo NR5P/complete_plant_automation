@@ -1,0 +1,185 @@
+{%extends "layout.html"%}
+
+{%block body%}
+    {% for valve in IrrigationValve.valveList %}
+        <h1>{{valve.name}}</h1>
+        <form>
+        <table class="table table-striped table-bordered">
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td>
+                        <form method="POST" action="">
+                            <div>
+                                <input class="form-control form-control-lg" type="text" placeholder="{{valve.name}}"
+                                name="valve_name" id="valve_id">
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>current state</td>
+                    <td>{{valve.currentStateOn | trueFalseIndicator()}}</td>
+                </tr>
+                <tr>
+                    <td>on/off</td>
+                    <td>
+                        <div class="form-group">
+                            <select class="form-control" id="">
+                                <option>on</option>
+                                <option>off</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>testing</td>
+                    <td>
+                        <button type="button" class="btn btn-danger">TEST</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>cycle or irrigate</td>
+                    <td>
+                        <div class="form-group">
+                            <select class="form-control" id="">
+                                <option>cycle</option>
+                                <option>irrigate</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>irrigation times</td>
+                    <td>
+                        {%if not valve.irrigationTimes%}
+                            None
+                        {%else%}
+                            {%for key, value in valve.irrigationTimes%}
+                                time: {{key | strftimeConverter()}}  duration: {{value | HrMinSec()}}
+                                <button type="button" class="btn btn-danger">Delete</button>
+                            {%endfor%}
+                        {%endif%}
+                        <br><br>
+                        <input type="time">
+                        <button type="button" class="btn btn-primary">Add</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>cycle on time</td>
+                    <td>
+                        {%if not valve.cycleOnTime%}
+                            None<br><br>
+                            <form>
+                                <div>
+                                    <label>Hours</label>
+                                    <input type="number" name="" min="0" max="24"><br>
+                                    <label>Minutes</label>
+                                    <input type="number" name="" min="0" max="59"><br>
+                                    <label>Seconds</label>
+                                    <input type="number" name="" min="0" max="59"><br>
+                                    <button type="button" class="btn btn-primary">Add</button>
+                                </div>
+                            </form>
+                        {%else%}
+                            {{valve.cycleOnTime | HrMinSec()}}
+                            <button type="button" class="btn btn-primary">delete</button>
+                        {%endif%}
+                        <br><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>cycle off time</td>
+                    <td>
+                        {%if not valve.cycleOffTime%}
+                            None<br><br>
+                            <form>
+                                <div>
+                                    <label>Hours</label>
+                                    <input type="number" name="" min="0" max="24"><br>
+                                    <label>Minutes</label>
+                                    <input type="number" name="" min="0" max="59"><br>
+                                    <label>Seconds</label>
+                                    <input type="number" name="" min="0" max="59"><br>
+                                    <button type="button" class="btn btn-primary">Add</button>
+                                </div>
+                            </form>
+                        {%else%}
+                            {{valve.cycleOffTime | HrMinSec()}}
+                            <button type="button" class="btn btn-primary">delete</button>
+                        {%endif%}
+                        <br><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>blackout start</td>
+                    <td>
+                        {%if not valve.blackoutStart%}
+                            None
+                            <br><br>
+                            <input type="time">
+                            <button type="button" class="btn btn-primary">Add</button>
+                        {%else%}
+                            {{valve.blackoutStart | strftimeConverter()}}
+                            <button type="button" class="btn btn-primary">delete</button>
+                        {%endif%}
+                    </td>
+                </tr>
+                <tr>
+                    <td>blackout stop</td>
+                    <td>
+                        {%if not valve.blackoutStop%}
+                            None
+                            <br><br>
+                            <input type="time">
+                            <button type="button" class="btn btn-primary">Add</button>
+                        {%else%}
+                            {{valve.blackoutStop | strftimeConverter()}}
+                            <button type="button" class="btn btn-primary">delete</button>
+                        {%endif%}
+                    </td>
+                </tr>
+                <tr>
+                    <td>days</td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="">
+                            <label class="form-check-label">Select All</label>
+                        </div>
+                        <br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="">
+                            <label class="form-check-label">Monday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="">
+                            <label class="form-check-label">Tuesday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="">
+                            <label class="form-check-label">Wednesday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="">
+                            <label class="form-check-label">Thursday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="">
+                            <label class="form-check-label">Friday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="">
+                            <label class="form-check-label">Saturday</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="">
+                            <label class="form-check-label">Sunday</label>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </form>
+        <button type="submit" class="btn btn-success btn-block">Submit</button><br><br>
+    {% endfor %}
+{%endblock%}
