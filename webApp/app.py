@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 import sys
 from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.Timer import Timer
@@ -23,9 +23,11 @@ app.jinja_env.filters["trueFalseIndicator"] = trueFalseIndication
 def index():
     return render_template("main.html", Timer=Timer)
 
-@app.route("/valves")
+@app.route("/valves", methods=["GET", "POST"])
 def irrigationValve():
     form = ValveForm()
+    if form.validate_on_submit():
+        flash("changes saved", "success")
     return render_template("valves.html", IrrigationValve=IrrigationValve, form=form)
 
 #@app.route("/send", methods=["GET", "POST"])

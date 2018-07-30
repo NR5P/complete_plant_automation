@@ -9,10 +9,16 @@ class IrrigationValve(Timer):
     valveList = []
 
     test = "some testing text"
+    idNumber = 0
 
     def __init__(self, pin, name):
         super().__init__(pin, name)
 
+        IrrigationValve.idNumber += 1
+        self.id = IrrigationValve.idNumber
+        self.name = name
+        self.notes = None
+        self.on = False
         self.cycleOrIrrigate = None
         self.irrigationTimes = {}
         self.cycleOnTime = None
@@ -28,6 +34,9 @@ class IrrigationValve(Timer):
             self.load()
         except:
             self.save()
+
+    def __str__(self):
+        return self.name
 
     def run(self):
         time.sleep(.1)
@@ -51,5 +60,7 @@ class IrrigationValve(Timer):
                     GPIO.output(self.pin, False)
         else:
                 GPIO.output(self.pin, False)
+
+
 
 
