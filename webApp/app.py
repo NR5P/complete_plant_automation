@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, flash
+from flask_bootstrap import Bootstrap
 import sys
 from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.Timer import Timer
@@ -9,6 +10,7 @@ sys.path.append("/home/this/programming/complete_plant_automation/automation_con
 sys.path.append("/home/this/programming/complete_plant_automation")
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 app.config["SECRET_KEY"] = "thisisasecretkey"
 
 
@@ -25,10 +27,14 @@ def index():
 
 @app.route("/valves", methods=["GET", "POST"])
 def irrigationValve():
-    form = ValveForm()
-    if form.validate_on_submit():
-        flash("changes saved", "success")
-    return render_template("valves.html", IrrigationValve=IrrigationValve, form=form)
+    #form = ValveForm()
+    #formList = [ValveForm() for i in IrrigationValve.valveList]
+    formList = [ValveForm() for i in range(10)]
+    for form in formList:
+        if form.validate_on_submit():
+            form.setValve(irrigationValve.valveList[form])
+            flash("changes saved", "success")
+    return render_template("valves.html", IrrigationValve=IrrigationValve, formList=formList)
 
 #@app.route("/send", methods=["GET", "POST"])
 #def send():
