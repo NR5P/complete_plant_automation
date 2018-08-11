@@ -5,3 +5,4 @@ __pycache__/
 .desktopfolder
 .idea
 venv/
+lights *

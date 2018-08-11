@@ -9,10 +9,13 @@ from webApp.forms import ValveForm
 sys.path.append("/home/this/programming/complete_plant_automation/automation_controller")
 sys.path.append("/home/this/programming/complete_plant_automation")
 
+
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 app.config["SECRET_KEY"] = "thisisasecretkey"
 
+app.jinja_env.filters['strf_time_converter'] = strf_time_converter
+app.jinja_env.filters['deltaToHrMinSec'] = deltaToMinSec
 
 app.jinja_env.filters["strftimeConverter"] = strf_time_converter
 app.jinja_env.filters["HrMinSec"] = deltaToHrMinSec

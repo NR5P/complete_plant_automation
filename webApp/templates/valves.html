@@ -68,7 +68,7 @@
                         {% else %}
                             {% for key, value in IrrigationValve.valveList[i].irrigationTimes.items() %} 
                                 time: {{ key | strf_time_converter() }}  duration: {{ value | deltaToHrMinSec() }}
-                                <button type="submit" name="action" id="{% key %}" value="irrigation-time-delete" class="btn btn-danger">Delete</button>
+                                <button type="submit" name="action" id="{{ key }}" value="irrigation-time-delete" class="btn btn-danger">Delete</button>
                             {% endfor %} 
                         {% endif %}
                         <br><br>
