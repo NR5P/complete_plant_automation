@@ -1,14 +1,21 @@
+"""
+base class for each automation component. 
+"""
+
 import pickle
 
 class Timer():
     timer_list = []
+    count = None # number of components currently running
 
-    def __init__(self, pin, name):
+    def __init__(self, pin, notes, name = f"component {count}", on = False, test = False, currentStateOn = False):
         self.name = name
         self.pin = pin
-        self.on = False
-        self.test = False
-        self.currentStateOn = False
+        self.on = on
+        self.currentlyOn = False # this is if the component is running in real time or not
+        self.test = test
+        self.currentStateOn = currentStateOn
+        self.notes = notes
         self.save()
 
     def __str__(self):
@@ -30,4 +37,3 @@ class Timer():
         while True:
             for i in Timer.timer_list:
                 i.run()
-

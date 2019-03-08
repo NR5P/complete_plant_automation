@@ -1,4 +1,9 @@
+"""
+for timed irrigation for typical garden irrigation. 
+"""
+
 from automation_controller.Timer import Timer
+
 import datetime
 import RPi.GPIO as GPIO
 import time
@@ -6,29 +11,13 @@ import pickle
 
 
 class IrrigationValve(Timer):
-    valveList = []
 
-    test = "some testing text"
-    idNumber = 0
+    def __init__(self, pin, notes, name, on, test, currentStateOn, irrigationTimes = {}, days = set()):
+        super().__init__(self, pin, notes, name, on, test, currentStateOn)
 
-    def __init__(self, pin, name):
-        super().__init__(pin, name)
-
-        IrrigationValve.idNumber += 1
-        self.id = IrrigationValve.idNumber
-        self.name = name
-        self.notes = None
-        self.on = False
-        self.cycleOrIrrigate = None
-        self.irrigationTimes = {}
-        self.cycleOnTime = None
-        self.cycleOffTime = None
-        self.blackoutStart = None
-        self.blackoutStop = None
-        self.days = set()
+        self.irrigationTimes = irrigationTimes
+        self.days = days 
         Timer.timer_list.append(self)
-        IrrigationValve.valveList.append(self)
-
 
         try:
             self.load()

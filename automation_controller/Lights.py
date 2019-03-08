@@ -6,14 +6,12 @@ import pickle
 
 
 class Lights(Timer):
-    lightsList = []
 
-    def __init__(self, pin, name):
-        super().__init__(pin, name)
-        self.time_on = None
-        self.time_off = None
+    def __init__(self, pin, notes, name, on, test, currentStateOn, time_on = None, time_off = None):
+        super().__init__(self, pin, notes, name, on, test, currentStateOn)
+        self.time_on = time_on
+        self.time_off = time_off
         Timer.timer_list.append(self)
-        Lights.lightsList.append(self)
 
         try:
             self.load()

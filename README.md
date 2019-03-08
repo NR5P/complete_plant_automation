@@ -1,13 +1,14 @@
 # Complete Plant Automation
-A project to be able allow complete automation of growing plants using the raspberry pi. Irrigation, grow lights, temperature control, and more. Multi platform apps to allow control over wifi network. Temperature, humidity, and other feedback to allow monitoring.
+A project to be able allow complete automation of growing plants using the raspberry pi. Irrigation, grow lights, temperature control, and more. Using Flask framework to allow control over wifi network through web browser on any device. Also touch screen interface on raspberry pi. Temperature, humidity, and other feedback to allow monitoring.
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## control of 
 * irrigation valves
 * grow lights
-* temperature control
-* more later
+* temperature control, heat etc.
+* humidifier
+* fan 
 
 ## flexibility
 * multi platform apps for any device
@@ -32,17 +33,6 @@ which will return the gui in the web browser.
 - [x] network socket control over terminal
 - [ ] temperature sensor capability
 - [ ] humidity sensor capability
-
-## problems
-I'm thinking about the best way for a user to add the controller to their network, I can only think of two ways
-of doing this
-- by adding an lcd or touchscreen to the raspberry pi to add wifi password
-- for the user to temporarily plug in an hdmi monitor to add the wifi password.  
-
-I don't like either of these methods. I don't think using a small screen connected to the device is a very 
-efficient way of setting the timers, not nearly as easy as using a web browser. Also it's another point of failure.
-
-If anyone has a better idea or something I haven't thought about please let me know.
 
 ## Contact
 Name: Nathan Rigg  

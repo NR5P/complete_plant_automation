@@ -52,4 +52,14 @@ def threadingStart():
     appThread.start()
 
 if __name__ == "__main__":
+
+# Replace libraries by fake ones
+# https://pypi.org/project/fake-rpi/
+    import sys
+    import fake_rpi
+
+    sys.modules['RPi'] = fake_rpi.RPi     # Fake RPi (GPIO)
+    sys.modules['smbus'] = fake_rpi.smbus # Fake smbus (I2C)
+# end of fake pi stuff
+
     main()
