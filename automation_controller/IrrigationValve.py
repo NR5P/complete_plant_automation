@@ -7,7 +7,6 @@ from automation_controller.Timer import Timer
 import datetime
 import RPi.GPIO as GPIO
 import time
-import pickle
 
 
 class IrrigationValve(Timer):

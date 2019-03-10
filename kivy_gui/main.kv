@@ -1,0 +1,27 @@
+#:kivy 1.10
+
+WindowManager:
+    MainWindow:
+    ComponentList:
+
+<MainWindow>:
+    name: "main"
+    GridLayout:
+        cols: 2
+        Label:
+            text: "something"
+        Button:
+            text: "somthing else"
+            on_release: 
+                root.sayHello()
+                #app.root.current = "componentList"
+                #root.manager.transition.direction = "left"
+
+<ComponentList>:
+    name: "componentList"
+    Button:
+        text: "go back"
+        on_release: 
+            app.root.current = "main"
+            root.manager.transition.direction = "right"
+
