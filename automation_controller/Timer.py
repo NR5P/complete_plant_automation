@@ -24,31 +24,30 @@ class Timer():
     def loadJsonFile():
         """
         checks if there is a json file already open. if there is not a file it creates one
-        then it returns the dictionary.
         """
         try:
             with open("components.json") as f:
                 jsonData = json.load(f)
-                #return jsonData
-                Timer.componentsDictList = jsonData
+                if Timer.componentsDictList != jsonData:
+                    Timer.componentsDictList = jsonData
         except NameError:
             jsonFile = open("components.json", "w")
             jsonFile.close()
 
-    def addToJson(self, data=None):
+    def addToJson(self, entry=None):
         """
         adds saved dictionary (componentsJson) to the json file. if a dictionary is passed and 
         the entry does not exist by the name the dictionary is updated. if the value does exist
         the entry in Timer.components with the same name is overridden
         """
-        if data:
-            if self.isEntryAlreadyIn(data):
+        if entry:
+            if self.isEntryAlreadyIn(entry):
                 for i in Timer.componentsDictList:
-                    if i["name"] == data["name"]:
+                    if i["name"] == entry["name"]:
                         Timer.componentsDictList.remove(i)
                         break
-            else:
-                Timer.componentsDictList.append(data)
+
+            Timer.componentsDictList.append(entry)
 
         jsonData = json.dumps(Timer.componentsDictList, default=str)
         jsonFile = open("components.json", "w")
@@ -67,9 +66,24 @@ class Timer():
 
     @staticmethod
     def run():
-        while True:
-            for i in Timer.timer_list:
-                i.run()
+        """
+        iterates through list once and calls run on each component
+        """
+        for i in Timer.timer_list:
+            i.run()
+
+    def retrieveSelfFromJson(self):
+        """
+        iterate through components dict list and see if there
+        """
+        Timer.loadJsonFile()
+        for i in Timer.componentsDictList:
+            if i["name"] == self.name:
+                return i
+
+    def deleteObjectFromList(self):
+        objectInList = self.retrieveSelfFromJson() 
+        objectInList.remove()
 
 
 

@@ -3,7 +3,7 @@ for cycle irrigation like for propagating plants. takes on time, off time, and a
 for short bursts of irrigation
 """
 
-from automation_controller.Timer import Timer
+from .Timer import Timer
 
 import time
 import datetime
@@ -17,32 +17,31 @@ class CycleIrrigation(Timer):
         self.cycleOffTime = None
         self.blackoutStart = None
         self.blackoutStop = None
+        self.componentData = self.save()
 
     def run(self):
         pass
     
     def save(self):
-        componentData = {"type" : "cycle",
-                         "name" : self.name,
-                         "pin"  : self.pin,
-                         "on"   : self.on,
-                         "currentlyOn" : self.currentStateOn,
-                         "test" : self.test,
-                         "notes": self.notes,
-                         "blackoutStart" : self.blackoutStart,
-                         "blackoutStop" : self.blackoutStop}
+        self.componentData = {"type" : "cycle",
+                              "name" : self.name,
+                              "pin"  : self.pin,
+                              "on"   : self.on,
+                              "currentlyOn" : self.currentStateOn,
+                              "test" : self.test,
+                              "notes": self.notes,
+                              "blackoutStart" : self.blackoutStart,
+                              "blackoutStop" : self.blackoutStop}
         self.addToJson(componentData)
 
-    def retrieveSelfFromJson(self):
-        """
-        iterate through components dict list and see if 
-        """
-        Timer.loadJsonFile()
+    def loadFromJsonToObject(self):
         for i in Timer.componentsDictList:
-            if i["name"] == self.name:
-                return i
+            if (i["name"] == self.name) and (i != self.componentData):
+                for k, v in i.items():
+                    if v != 
 
 
+    
 
 
 
