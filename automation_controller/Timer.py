@@ -30,6 +30,7 @@ class Timer():
                 jsonData = json.load(f)
                 if Timer.componentsDictList != jsonData:
                     Timer.componentsDictList = jsonData
+                    ####TODO#### make a function to load JSON data into objects on startup and add to object list##########TODO###########33
         except NameError:
             jsonFile = open("components.json", "w")
             jsonFile.close()
