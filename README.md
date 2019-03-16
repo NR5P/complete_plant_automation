@@ -3,6 +3,8 @@ A project to be able allow complete automation of growing plants using the raspb
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+![mainScreen](/home/nathan/Desktop/complete_plant_automation/Documentation/designMockups/componentListScreen.pdf  "main screen mockup")
+
 ## control of 
 * irrigation valves
 * grow lights

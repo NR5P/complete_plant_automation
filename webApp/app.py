@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, flash
-from flask_bootstrap import Bootstrap
+from flask import Flask, render_template, request, flash, jsonify
 import sys
 from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.Timer import Timer
@@ -11,7 +10,6 @@ sys.path.append("/home/this/programming/complete_plant_automation")
 
 
 app = Flask(__name__)
-bootstrap = Bootstrap(app)
 app.config["SECRET_KEY"] = "thisisasecretkey"
 
 app.jinja_env.filters['strf_time_converter'] = strf_time_converter
@@ -30,8 +28,6 @@ def index():
 
 @app.route("/valves", methods=["GET", "POST"])
 def irrigationValve():
-    #form = ValveForm()
-    #formList = [ValveForm() for i in IrrigationValve.valveList]
     formList = [ValveForm() for i in range(10)]
     for form in formList:
         if form.validate_on_submit():
@@ -39,18 +35,23 @@ def irrigationValve():
             flash("changes saved", "success")
     return render_template("valves.html", IrrigationValve=IrrigationValve, formList=formList)
 
-#@app.route("/send", methods=["GET", "POST"])
-#def send():
-#    if request.method == "POST":
-#        pass
-
 @app.route("/lights")
 def lights():
     return render_template("lights.html", Lights=Lights)
 
+@app.route("/api/<component>")
+def componentApi():
+    """
+    api for each template. 
+    """
+    return render_template("{component}.html")
 
-#if __name__ == "__main__":
+
 
 def startApp():
     app.run(host='0.0.0.0',port=5000)
+
+
+if __name__ == "__main__":
+    startApp()
 

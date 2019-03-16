@@ -3,8 +3,8 @@ from webApp import app
 import threading
 from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.Lights import Lights
-import RPi.GPIO as GPIO
 import sys
+import RPi.GPIO as GPIO
 sys.path.append("/home/this/programming/complete_plant_automation/automation_controller")
 sys.path.append("/home/this/programming/complete_plant_automation")
 
@@ -27,21 +27,6 @@ def main():
     GPIO.setup(37, GPIO.OUT)
     GPIO.setup(8, GPIO.OUT)
 
-
-    valve_1 = IrrigationValve(11, "valve 1")
-    valve_2 = IrrigationValve(13, "valve 2")
-    valve_3 = IrrigationValve(15, "valve 3")
-    valve_4 = IrrigationValve(19, "valve 4")
-    valve_5 = IrrigationValve(21, "valve 5")
-    valve_6 = IrrigationValve(23, "valve 6")
-    valve_7 = IrrigationValve(29, "valve 7")
-    valve_8 = IrrigationValve(31, "valve 8")
-    valve_9 = IrrigationValve(33, "valve 9")
-    valve_10 = IrrigationValve(35, "valve 10")
-
-    lights_1 = Lights(37, "lights 1")
-    lights_2 = Lights(8, "lights 2")
-
     threadingStart()
 
 def threadingStart():
@@ -52,14 +37,4 @@ def threadingStart():
     appThread.start()
 
 if __name__ == "__main__":
-
-# Replace libraries by fake ones
-# https://pypi.org/project/fake-rpi/
-    import sys
-    import fake_rpi
-
-    sys.modules['RPi'] = fake_rpi.RPi     # Fake RPi (GPIO)
-    sys.modules['smbus'] = fake_rpi.smbus # Fake smbus (I2C)
-# end of fake pi stuff
-
     main()

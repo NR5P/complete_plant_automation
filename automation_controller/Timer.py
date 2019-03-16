@@ -9,7 +9,7 @@ class Timer():
     count = None # number of components currently running
     componentsDictList = []
 
-    def __init__(self, pin, notes, name = f"component {count}", on = False, test = False, currentStateOn = False):
+    def __init__(self, pin, notes, name = "component {}".format(count), on = False, test = False, currentStateOn = False):
         self.name = name
         self.pin = pin
         self.on = on
