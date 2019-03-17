@@ -1,7 +1,11 @@
-from flask import Flask, render_template, request, flash, jsonify
-import sys
-from automation_controller.IrrigationValve import IrrigationValve
+from flask import Flask, render_template, request, flash, jsonify, redirect, url_for
+import sys, os, json
 from automation_controller.Timer import Timer
+from automation_controller.heater import Heater
+from automation_controller.cycleIrrigation import CycleIrrigation
+from automation_controller.fan import Fan
+from automation_controller.humidifier import Humidifier
+from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.Lights import Lights
 from .jinja_filters import *
 from webApp.forms import ValveForm
@@ -21,32 +25,85 @@ app.jinja_env.filters["HrMin"] = deltaToHrMin
 app.jinja_env.filters["MinSec"] = deltaToMinSec
 app.jinja_env.filters["trueFalseIndicator"] = trueFalseIndication
 
-@app.route("/")
-@app.route("/main")
-def index():
-    return render_template("main.html", Timer=Timer)
-
-@app.route("/valves", methods=["GET", "POST"])
-def irrigationValve():
-    formList = [ValveForm() for i in range(10)]
-    for form in formList:
-        if form.validate_on_submit():
-            form.setValve(irrigationValve.valveList[form])
-            flash("changes saved", "success")
-    return render_template("valves.html", IrrigationValve=IrrigationValve, formList=formList)
-
-@app.route("/lights")
-def lights():
-    return render_template("lights.html", Lights=Lights)
-
-@app.route("/api/<component>")
-def componentApi():
+@app.route("/api", methods=['GET'])
+def returnAll():
     """
-    api for each template. 
+    returns all components in json file
     """
-    return render_template("{component}.html")
+    try:
+        with open("/home/pi/components.json", "r") as f:
+            data = json.load(f)
+        return jsonify(data)
+    except:
+        return "file aint working"
 
+@app.route("/api", methods=['POST'])
+def addToJson():
+    if request.json["type"] == "cycleirrigation":
+        CycleIrrigation.addToJson(request)
+    elif request.json["type"] == "irrigationvalve":
+        IrrigationValve.addToJson(request)
+    elif request.json["type"] == "fan":
+        Fan.addToJson(request)
+    elif request.json["type"] == "heater":
+        Heater.addToJson(request)
+    elif request.json["type"] == "light":
+        Lights.addToJson(request)
+    elif request.json["humidifier"] == "humidifier":
+        Humidifier.addToJson(request)
 
+    # return all of the componenents
+    return redirect(url_for("returnAll")) 
+
+@app.route("/api/<name>", methods=['PUT'])
+def updateJson(name):
+    if request.json["type"] == "cycleirrigation":
+        CycleIrrigation.updateJson(request, name)
+    elif request.json["type"] == "irrigationvalve":
+        IrrigationValve.updateJson(request, name)
+    elif request.json["type"] == "fan":
+        Fan.updateJson(request, name)
+    elif request.json["type"] == "heater":
+        Heater.updateJson(request, name)
+    elif request.json["type"] == "light":
+        Lights.updateJson(request, name)
+    elif request.json["humidifier"] == "humidifier":
+        Humidifier.updateJson(request, name)
+
+    # return all of the componenents
+    return redirect(url_for("returnAll")) 
+
+@app.route("/api/<name>", methods=['DELETE'])
+def removeJson(name):
+    try:
+        with open("/home/pi/components.json", "r") as f:
+            data = json.load(f) # load the json file into a dictionary
+    except:
+        pass
+
+    component = [i for i in data if data["name"] == name]
+    data.remove(component[0])
+
+    # write the dictionary to json file
+    jsonData = json.dumps(data, default=str)
+    jsonFile = open("/home/pi/components.json", "w")
+    jsonFile.write(jsonData)
+    jsonFile.close()
+
+    return redirect(url_for("returnAll"))
+
+@app.route("/api/<name>", methods=['GET'])
+def returnOneComponentType(name):
+    """
+    returns json data from file that is of type in url, dynamically obtained 
+    """
+    try:
+        with open("/home/pi/components.json", "r") as f:
+            data = json.load(f)
+    except:
+        return "file aint working"
+    component = [i for i in data if i["type"] == name]
+    return jsonify(component)
 
 def startApp():
     app.run(host='0.0.0.0',port=5000)

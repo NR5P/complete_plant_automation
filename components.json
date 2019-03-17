@@ -1,0 +1,14 @@
+[
+    {
+        "type" : "valve",
+        "on" : true
+    },
+    {
+        "type" : "heater",
+        "on" : false
+    },
+    {
+        "type" : "valve",
+        "on" : false
+    }
+]

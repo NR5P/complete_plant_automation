@@ -42,7 +42,7 @@ class Timer():
         the entry in Timer.components with the same name is overridden
         """
         if entry:
-            if self.isEntryAlreadyIn(entry):
+            if Timer.isEntryAlreadyIn(entry):
                 for i in Timer.componentsDictList:
                     if i["name"] == entry["name"]:
                         Timer.componentsDictList.remove(i)
@@ -55,12 +55,18 @@ class Timer():
         jsonFile.write(jsonData)
         jsonFile.close()
 
-    def isEntryAlreadyIn(self, entry):
+    @staticmethod
+    def isEntryAlreadyIn(request):
         """
         returns True if entry is already in list of dicts
         """
-        for i in Timer.componentsDictList:
-            if i["name"] == entry["name"]:
+        try:
+            with open("/home/pi/components.json", "r") as f:
+                data = json.load(f)
+        except:
+            pass
+        for i in data:
+            if i["name"] == request.json["name"]:
                 return True
             else:
                 return False
@@ -85,6 +91,8 @@ class Timer():
     def deleteObjectFromList(self):
         objectInList = self.retrieveSelfFromJson() 
         objectInList.remove()
+
+    
 
 
 
