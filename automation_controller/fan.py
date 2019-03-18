@@ -21,7 +21,7 @@ class Fan(Timer):
             with open("/home/pi/components.json", "r") as f:
                 data = json.load(f) # load the json file into a dictionary
         except:
-            pass
+            print("issue opening file")
         componentData = {
             "type" : request.json["type"],
             "name" : request.json["name"],

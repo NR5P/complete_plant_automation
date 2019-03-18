@@ -74,7 +74,7 @@ def updateJson(request, name):
 
     component = [i for i in data if data["name"] == name]
     # if the name is already in replace the values
-    component[0]["componentType"] = request.json["type"]
+    component[0]["type"] = request.json["type"]
     component[0]["name"] = request.json["name"]
     component[0]["pin"] = request.json["pin"]
     component[0]["on"] = request.json["on"]

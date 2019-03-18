@@ -1,14 +1,1 @@
-[
-    {
-        "type" : "valve",
-        "on" : true
-    },
-    {
-        "type" : "heater",
-        "on" : false
-    },
-    {
-        "type" : "valve",
-        "on" : false
-    }
-]
+[{"type": "valve", "on": true}, {"type": "heater", "on": false}, {"type": "valve", "on": false}, {"pin": 6, "blackoutStart": "yet", "name": "by barn", "notes": "no notes", "test": false, "componentType": "cycleirrigation", "cycleOffTime": "another tim", "on": true, "blackoutStop": "again", "currentStateOn": "not", "cycleOnTime": "a time"}, {"pin": 6, "type": "fan", "name": "in barn", "notes": "no notes", "test": false, "on": true, "temperature": 60, "currentStateOn": "not"}]

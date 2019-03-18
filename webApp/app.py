@@ -25,6 +25,14 @@ app.jinja_env.filters["HrMin"] = deltaToHrMin
 app.jinja_env.filters["MinSec"] = deltaToMinSec
 app.jinja_env.filters["trueFalseIndicator"] = trueFalseIndication
 
+@app.route("/", methods=['GET'])
+def mainPage():
+    return render_template("main.html")
+
+@app.route("/settings", methods=['GET'])
+def settings():
+    return render_template("settings.html")
+
 @app.route("/api", methods=['GET'])
 def returnAll():
     """
@@ -49,7 +57,7 @@ def addToJson():
         Heater.addToJson(request)
     elif request.json["type"] == "light":
         Lights.addToJson(request)
-    elif request.json["humidifier"] == "humidifier":
+    elif request.json["type"] == "humidifier":
         Humidifier.addToJson(request)
 
     # return all of the componenents
@@ -102,7 +110,7 @@ def returnOneComponentType(name):
             data = json.load(f)
     except:
         return "file aint working"
-    component = [i for i in data if i["type"] == name]
+    component = [i for i in data if data["type"] == name]
     return jsonify(component)
 
 def startApp():

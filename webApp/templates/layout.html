@@ -1,20 +1,24 @@
-{% block head %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% block head %}
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-{% endblock %}
-{% block title %}
-    {% if title %}{{ title }}{% else %}Complete Plant Automation{% endif %}
-{% endblock %}
-{% block content %}
-    <div class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert-{{ category }}">
-                       {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {%block body_content%}{%endblock%}
-    </div>
-{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/normalize.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/skeleton.css') }}">
+
+    <title>complete plant automation</title>
+</head>
+<body>
+    {% endblock %}
+
+<div class="container">
+    {% block body %}
+    {% block content %}{%endblock%}
+
+    {% endblock %}
+</div>
+
+<script type="text/javascript" src="{{url_for('static', filename='/js/async.js')}}"></script>
+</body>
+
+</html>

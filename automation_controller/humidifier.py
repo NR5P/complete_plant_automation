@@ -21,7 +21,7 @@ class Humidifier(Timer):
         except:
             pass
         componentData = {
-            "componentType" : request.json["type"],
+            "type" : request.json["type"],
             "name" : request.json["name"],
             "pin" : request.json["pin"],
             "on" : request.json["on"],
