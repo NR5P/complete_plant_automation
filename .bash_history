@@ -176,3 +176,57 @@ ls
 cd ..
 ls
 python3 Main.py 
+ls
+python3 Main.py 
+git status
+ls
+git
+sudo apt install git
+git status
+ls
+ls -a
+ls
+pwd
+clear
+ls
+cd ..
+ls
+ls -a
+pwd
+ls
+ls -al
+ls
+mkdir another
+cd pi
+ls
+mkdir git
+ls
+cd git
+ls
+ls -a
+ls-a
+ls -a
+mv .git ..
+mv .gitignore ..
+ls
+cd ..
+ls
+rm -r git
+ls
+ls -a
+git status
+git add webApp*
+git status
+vim .gitignore
+git add .
+ls
+git status
+git commit -m "started working on main screen ui"
+git config --global user.email "orangev8zcar@gmail.com"
+git config --global user.name "NR5P"
+git commit -m "started working on the ui"
+git status
+git push origin master
+ls
+python3 Main.py 
+exit
