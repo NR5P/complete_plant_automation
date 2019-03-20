@@ -1,0 +1,19 @@
+button {
+    transition: background-color 0.2s linear;
+}
+
+button.accordian {
+    background-color: whitesmoke;
+}
+
+button:hover {
+    background-color: aquamarine;
+}
+
+.accordian-content {
+    padding: 0 20px;
+    border-left: 1px solid aquamarine;
+    border-right: 1px solid aquamarine;
+    max-height: 0;
+    overflow: hidden;
+}

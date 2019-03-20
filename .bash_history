@@ -230,3 +230,16 @@ git push origin master
 ls
 python3 Main.py 
 exit
+python3 Main.py 
+ls
+vim components.json 
+python3 Main.py 
+git status
+git commit -m "added the httprequest for all components on main window"
+git status
+git add .
+git status
+git commit -m "added the httprequest for all the components to put on main window"
+git status
+git push origin master
+exit
