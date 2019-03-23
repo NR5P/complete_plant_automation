@@ -45,24 +45,26 @@ function setUpAccordian() {
                 if (content.style.maxHeight)
                 {
                     content.style.maxHeight = null; // accordian is open, close it
-                    //interval = setInterval(getAllComponents, 2000);
                 } else {
-                    //clearInterval(interval); // stop reloading
                     content.style.maxHeight = content.scrollHeight + "px"; // accordian is closed, open it
             }
         }
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////
+
+/* 
+converts the isoformat time stored in json to a readable time output later will make this 
+dynamic for either 24 or 12 hour formats
+*/
 function convertFromIsoToTime(isoFormat){
-    const time = new Date(isoFormat);
-    return time.prototype.getHours() + " : " + time.prototype.getMinutes;
+    //const time = new Date(isoFormat);
+    //return time.prototype.getHours() + " : " + time.prototype.getMinutes;
+    return "";
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-//TODO how should dates be stored in json format
-//TODO how to convert date from python to that format
-//TODO how to convert form that format to javascript Date() object
 
 /* takes component and returns the settings of the element depending on the componenet type */
 function returnComponentSettings(element) {
@@ -140,3 +142,21 @@ function returnComponentSettings(element) {
             return "there was a problem here";
     }
 }
+
+///////////////////////////////DROPDOWN BUTTON FOR ADDING COMPONENTS//////////////////////////////\
+function dropDownAddList() {
+    document.getElementById("addNewDropDown").classList.toggle("show");
+}
+
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+        }
+    }
+} 

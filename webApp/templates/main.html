@@ -4,7 +4,17 @@
     <h2>All Components</h2>
     <div>
         <a class="button u-pull-left one-half column" href="/settings">Settings</a>
-        <button class="u-pull-right one-half column">Add New</button>
+        <div class="dropdown">
+            <button onclick="dropDownAddList()" class="u-pull-right one-half column dropbtn">Add New</button>
+            <div id="addNewDropDown" class="dropdown-content">
+                <a href="#">Cycle Irrigation</a>
+                <a href="#">Timed Irrigation</a>
+                <a href="#">Light</a>
+                <a href="#">Fan</a>
+                <a href="#">Heater</a>
+                <a href="#">Humidifier</a>
+            </div>
+        </div>
     </div>
     <div id="list-all-components">
         
