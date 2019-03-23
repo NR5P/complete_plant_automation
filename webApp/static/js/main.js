@@ -1,5 +1,6 @@
 
 window.onload = getAllComponents;
+let oldResponse;
 
 /* query api every second to refresh components list on main page*/
 let interval = setInterval(getAllComponents, 2000);
@@ -13,19 +14,19 @@ function getAllComponents() {
         if (this.status === 200) {
             //TODO break this up!!!!!!!!. have response as a top variable and make another function to check if the file is different than the old response, if it is then update, if not don't update.
             const response = JSON.parse(this.responseText);
-            response.forEach(element => {
-                output += `<button class="u-full-width accordian">${element.name}</button>
-                           <div class="accordian-content">
-                                <p>
-                                    lorem  jdsiapofjsa jpsa jfdspf sspa
-                                    jf dsopaf jds jdspoa jfidspa jfdspo fdspa
-                                    jfdisoa pfdjsiap  ijdsopa fjdis jfdsap
-                                </p>
-                           </div>`;
-            });
+            if (this.responseText !== oldResponse)
+            {
+                oldResponse = this.responseText;
+                response.forEach(element => {
+                    output += `<button class="u-full-width accordian">${element.name}</button>
+                            <div class="accordian-content">
+                                ${returnComponentSettings(element)}
+                            </div>`;
+                });
+                document.getElementById("list-all-components").innerHTML = output;
+                setUpAccordian();
+            }
         }
-        document.getElementById("list-all-components").innerHTML = output;
-        setUpAccordian();
     }
     xhr.send();
 }
@@ -46,10 +47,96 @@ function setUpAccordian() {
                     content.style.maxHeight = null; // accordian is open, close it
                     //interval = setInterval(getAllComponents, 2000);
                 } else {
-                    clearInterval(interval); // stop reloading
+                    //clearInterval(interval); // stop reloading
                     content.style.maxHeight = content.scrollHeight + "px"; // accordian is closed, open it
             }
         }
     }
 }
+
+function convertFromIsoToTime(isoFormat){
+    const time = new Date(isoFormat);
+    return time.prototype.getHours() + " : " + time.prototype.getMinutes;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
+//TODO how should dates be stored in json format
+//TODO how to convert date from python to that format
+//TODO how to convert form that format to javascript Date() object
+
+/* takes component and returns the settings of the element depending on the componenet type */
+function returnComponentSettings(element) {
+    let output = "";
+    switch (element.componentType) {
+        case "cycleirrigation" :
+            output += `
+                       <div class="row">
+                        <button class="u-pull-left one-third column">Change Name</button>
+                        <h4 class="u-pull-right two-thirds column">${element.name}</h4>
+                       </div>
+                       <div class="row">
+                        <button class="u-pull-left one-third column">Change Notes</button>
+                        <p class="u-pull-right two-thirds column">${element.notes}</p>
+                       </div>
+                       <div class="row">
+                        <button class="u-pull-left one-third column">Change Pin</button>
+                        <h4 class="u-pull-right two-thirds column">${element.pin}</h4>
+                       </div>
+                       <div class="row">
+                        <button class="u-pull-left one-third column">On or Off</button>
+                        <h4 class="u-pull-right two-thirds column">
+                            ${element.on ? "ON" : "OFF"}
+                        </h4>
+                       </div>
+                       <div class="row">
+                        <button class="u-pull-left one-third column">Change Pin</button>
+                        <h4 class="u-pull-right two-thirds column">
+                            ${element.currentstate ? "Currently Running" : "Currently Off"}
+                        </h4>
+                       </div>
+                       <div class="row">
+                        <button class="u-pull-left one-third column">Cycle On Time</button>
+                        <h4 class="u-pull-right two-thirds column">${element.cycleOnMinutes}:${element.cycleOnSeconds}</h4> 
+                       </div>
+                       <div class="row">
+                        <button class="u-pull-left one-third column">Cycle Off Time</button>
+                        <h4 class="u-pull-right two-thirds column">${element.cycleOffMinutes}:${element.cycleOffSeconds}</h4> 
+                       </div>
+                       <div class="row">
+                        <button class="u-pull-left one-third column">Blackout Start Time</button>
+                        <h4 class="u-pull-right two-thirds column">${convertFromIsoToTime(element.blackoutStartTime)}</h4> 
+                       </div>
+                       <div class="row">
+                        <button class="u-pull-left one-third column">Blackout Stop Time</button>
+                        <h4 class="u-pull-right two-thirds column">${convertFromIsoToTime(element.blackoutStopTime)}</h4> 
+                       </div>
+                       <div class="row">
+                        <button class="u-full-width">Test</button>
+                       </div>
+                       `
+            return output;
+        
+        case "timedirrigation" :  
+
+            return output;
+        
+        case "fan" : 
+
+            return output;
+
+        case "light" : 
+
+            return output;
+
+        case "heater" : 
+        
+            return output;
+
+        case "humidifier" : 
+
+            return output;
+    
+        default:
+            return "there was a problem here";
+    }
+}
