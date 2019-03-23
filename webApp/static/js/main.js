@@ -11,6 +11,7 @@ function getAllComponents() {
     xhr.onload = function() {
         let output = "";
         if (this.status === 200) {
+            //TODO break this up!!!!!!!!. have response as a top variable and make another function to check if the file is different than the old response, if it is then update, if not don't update.
             const response = JSON.parse(this.responseText);
             response.forEach(element => {
                 output += `<button class="u-full-width accordian">${element.name}</button>
@@ -42,13 +43,11 @@ function setUpAccordian() {
 
                 if (content.style.maxHeight)
                 {
-                    // accordian is open, close it
-                    content.style.maxHeight = null;
-                    interval = setInterval(getAllComponents, 2000);
+                    content.style.maxHeight = null; // accordian is open, close it
+                    //interval = setInterval(getAllComponents, 2000);
                 } else {
-                    // accordian is closed, open it
-                    clearInterval(interval);
-                    content.style.maxHeight = content.scrollHeight + "px";
+                    clearInterval(interval); // stop reloading
+                    content.style.maxHeight = content.scrollHeight + "px"; // accordian is closed, open it
             }
         }
     }

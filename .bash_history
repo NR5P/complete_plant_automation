@@ -243,3 +243,4 @@ git commit -m "added the httprequest for all the components to put on main windo
 git status
 git push origin master
 exit
+python3 Main.py 
