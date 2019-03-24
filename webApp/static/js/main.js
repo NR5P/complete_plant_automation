@@ -112,6 +112,9 @@ function returnComponentSettings(element) {
                         <h4 class="u-pull-right two-thirds column">${convertFromIsoToTime(element.blackoutStopTime)}</h4> 
                        </div>
                        <div class="row">
+                        <button id="delete-btn" class="u-full-width">Delete</button>
+                       </div>
+                       <div class="row">
                         <button class="u-full-width">Test</button>
                        </div>
                        `

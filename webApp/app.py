@@ -113,6 +113,24 @@ def returnOneComponentType(name):
     component = [i for i in data if data["type"] == name]
     return jsonify(component)
 
+@app.route("/addnew/<type>")
+def addNewComponent(type):
+    """
+    for adding new components.
+    """
+    if (type == "cycleirrigation"):
+        pass
+    elif (type == "timedirrigation"):
+        pass
+    elif (type == "light"):
+        pass
+    elif (type == "fan"):
+        pass
+    elif (type == "heater"):
+        pass
+    elif (type == "humidifier"):
+        pass
+
 def startApp():
     app.run(host='0.0.0.0',port=5000)
 
