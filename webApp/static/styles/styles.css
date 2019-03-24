@@ -1,13 +1,27 @@
+a {
+    text-decoration: none;
+    color: #555;
+    font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
+    line-height: 1.6;
+    font-weight: 400;
+    font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+a:hover {
+    background-color: aquamarine;
+    color: black;
+}
+
 button {
     transition: background-color 0.2s linear;
 }
 
-button:hover button:focus {
-    background-color: aquamarine;
-}
-
 button.accordian {
     background-color: whitesmoke;
+}
+
+button:hover {
+    background-color: aquamarine;
 }
 
 /* to change the icon after accordian opens*/
@@ -25,35 +39,30 @@ button.accordian::after {
     transition: max-height 0.2s ease-in-out;
 }
 
+/* drop down menu */
 .dropdown {
     position: relative;
-    display: inline-block;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: whitesmoke;
-    min-width: 300px;
-    overflow: auto;
+    right: 10%;
+    background-color: #f1f1f1;
+    min-width: 250px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
 
 .dropdown-content a {
-    color: #555;
+    color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
 
-.dropdown-content a:hover a:focus {
-    background-color: aquamarine;
-}
-
-/* 
-js adds this class to the .dropdown-content
-when user clicks to dropdown button
-*/
 .show {
     display: block;
 }
+
+/* end drop down menu */

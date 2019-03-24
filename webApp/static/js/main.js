@@ -12,7 +12,6 @@ function getAllComponents() {
     xhr.onload = function() {
         let output = "";
         if (this.status === 200) {
-            //TODO break this up!!!!!!!!. have response as a top variable and make another function to check if the file is different than the old response, if it is then update, if not don't update.
             const response = JSON.parse(this.responseText);
             if (this.responseText !== oldResponse)
             {
@@ -145,7 +144,7 @@ function returnComponentSettings(element) {
 
 ///////////////////////////////DROPDOWN BUTTON FOR ADDING COMPONENTS//////////////////////////////\
 function dropDownAddList() {
-    document.getElementById("addNewDropDown").classList.toggle("show");
+    document.getElementById("myDropdown").classList.toggle("show");
 }
 
 window.onclick = function(event) {
