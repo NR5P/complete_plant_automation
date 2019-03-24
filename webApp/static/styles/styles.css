@@ -33,6 +33,7 @@ button.accordian::after {
 
 #delete-btn {
     background-color: crimson;
+    color: black;
 }
 
 .accordian-content {

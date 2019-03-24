@@ -2,4 +2,51 @@
 
 {% block content %}
 
+<form action="/api" method="GET">
+    <h4>Name</h4>
+    <input type="text" name="name"/>
+
+    <h4>Notes</h4>
+    <textarea name="Notes"></textarea>
+
+    <h4>Pin</h4>
+    <select name="pin">
+        <option value="1">1</option>
+        <option value="2">2</option>
+    </select>
+
+    <!--change this with javascript to add 24 hours-->
+    <h4>Cycle On Time min:sec</h4>
+    <select name="hours">
+        <option value="1"></option>
+    </select>
+    <span>:</span>
+    <select name="hours">
+        <option value="1"></option>
+    </select>
+
+    <h4>Cycle Off Time min:sec</h4>
+    <select name="minutes">
+        <option value="1"></option>
+    </select>
+    <span>:</span>
+    <select name="minutes">
+        <option value="1"></option>
+    </select>
+
+    <h4>Blackout Start Time</h4>
+    <input type="time" name="blackoutStartTime">
+
+    <h4>Blackout Stop Time</h4>
+    <input type="time" name="blackoutStopTime">
+
+    <!--adjust in javascript to turn on and off with click, also
+    change color with click e.g red off and green on-->
+    <button class="u-full-width">OFF</button>
+    <button class="u-full-width">Cancel</button>
+    <input class="button" type="submit" name="submit">
+
+
+</form>
+
 {%endblock%}

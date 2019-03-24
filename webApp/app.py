@@ -119,17 +119,17 @@ def addNewComponent(type):
     for adding new components.
     """
     if (type == "cycleirrigation"):
-        pass
+        return render_template("addcycleirrigation.html")
     elif (type == "timedirrigation"):
-        pass
+        return render_template("addtimedirrigation.html")
     elif (type == "light"):
-        pass
+        return render_template("addlight.html")
     elif (type == "fan"):
-        pass
+        return render_template("addfan.html")
     elif (type == "heater"):
-        pass
+        return render_template("addheater.html")
     elif (type == "humidifier"):
-        pass
+        return render_template("addhumidifier.html")
 
 def startApp():
     app.run(host='0.0.0.0',port=5000)
