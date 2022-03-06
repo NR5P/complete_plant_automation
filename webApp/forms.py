@@ -1,13 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectField, BooleanField, SubmitField, DateField
-# from wtforms_components import TimeField
+from wtforms_components import TimeField
 from wtforms.validators import DataRequired, Length
 from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.IrrigationValve import IrrigationValve
 from automation_controller.Timer import Timer
 from automation_controller.Lights import Lights
 import datetime
-from wtforms.fields.html5 import TimeField
+#from wtforms.fields.html5 import TimeField
 
 
 
