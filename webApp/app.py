@@ -1,17 +1,10 @@
 from flask import Flask, render_template, request, flash, jsonify, redirect, url_for
 import sys, os, json
-from automation_controller.Timer import Timer
-from automation_controller.heater import Heater
-from automation_controller.cycleIrrigation import CycleIrrigation
-from automation_controller.fan import Fan
-from automation_controller.humidifier import Humidifier
-from automation_controller.IrrigationValve import IrrigationValve
-from automation_controller.Lights import Lights
 from .jinja_filters import *
 from webApp.forms import ValveForm
-sys.path.append("/home/this/programming/complete_plant_automation/automation_controller")
+from webApp.db import DB
+db = DB()
 sys.path.append("/home/this/programming/complete_plant_automation")
-
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "thisisasecretkey"
@@ -51,14 +44,6 @@ def addToJson():
         CycleIrrigation.addToJson(request)
     elif request.json["type"] == "irrigationvalve":
         IrrigationValve.addToJson(request)
-    elif request.json["type"] == "fan":
-        Fan.addToJson(request)
-    elif request.json["type"] == "heater":
-        Heater.addToJson(request)
-    elif request.json["type"] == "light":
-        Lights.addToJson(request)
-    elif request.json["type"] == "humidifier":
-        Humidifier.addToJson(request)
 
     # return all of the componenents
     return redirect(url_for("returnAll")) 
@@ -69,14 +54,6 @@ def updateJson(name):
         CycleIrrigation.updateJson(request, name)
     elif request.json["type"] == "irrigationvalve":
         IrrigationValve.updateJson(request, name)
-    elif request.json["type"] == "fan":
-        Fan.updateJson(request, name)
-    elif request.json["type"] == "heater":
-        Heater.updateJson(request, name)
-    elif request.json["type"] == "light":
-        Lights.updateJson(request, name)
-    elif request.json["humidifier"] == "humidifier":
-        Humidifier.updateJson(request, name)
 
     # return all of the componenents
     return redirect(url_for("returnAll")) 
@@ -122,14 +99,6 @@ def addNewComponent(type):
         return render_template("addcycleirrigation.html")
     elif (type == "timedirrigation"):
         return render_template("addtimedirrigation.html")
-    elif (type == "light"):
-        return render_template("addlight.html")
-    elif (type == "fan"):
-        return render_template("addfan.html")
-    elif (type == "heater"):
-        return render_template("addheater.html")
-    elif (type == "humidifier"):
-        return render_template("addhumidifier.html")
 
 def startApp():
     app.run(host='0.0.0.0',port=5000)
