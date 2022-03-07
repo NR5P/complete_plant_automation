@@ -1,4 +1,5 @@
 import mariadb, sys, time
+from ..Model.CycleIrrigation import CycleIrrigation
 
 class DB():
     def __init__(self):
@@ -22,40 +23,40 @@ class DB():
 
         self.cur = self.conn.cursor()
 
-    def addCycleIrrigation(self, daysToRun: str, description: str, name: str) -> int: 
+    def addCycleIrrigation(self, cycleIrrigation) -> int: 
         try:
-            self.cur.execute("INSERT INTO bluefrog.CycleIrrigation (DaysToRun, Description, Name) VALUES (?,?,?);", (daysToRun, description, name)) 
+            self.cur.execute("INSERT INTO bluefrog.CycleIrrigation (Description, Name) VALUES (?,?);", (cycleIrrigation.getDescription(), cycleIrrigation.getName())) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
             print(f"Error: {e}")
             return -1
 
-    def addCycleIrrigationBlackoutTimes(self, cycleIrrigationKey: int, blackoutStart: time, blackoutStop: time) -> int: 
+    def addCycleIrrigationBlackoutTimes(self, blackoutTimes) -> int: 
         try:
-            blackoutStart = time.strftime("%H:%M:%S", blackoutStart)
-            blackoutStop = time.strftime("%H:%M:%S", blackoutStop)
-            self.cur.execute("INSERT INTO bluefrog.CycleIrrigationBlackoutTimes (CycleIrrigationFK, BlackoutStart, BlackoutStop) VALUES (?,?,?);", (cycleIrrigationKey, blackoutStart, blackoutStop)) 
+            blackoutStart = time.strftime("%H:%M:%S", blackoutTimes.getBlackoutStartTime())
+            blackoutStop = time.strftime("%H:%M:%S", blackoutTimes.getBlackoutStopTime())
+            self.cur.execute("INSERT INTO bluefrog.CycleIrrigationBlackoutTimes (CycleIrrigationFK, BlackoutStart, BlackoutStop) VALUES (?,?,?);", (blackoutTimes.getFK(), blackoutStart, blackoutStop)) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
             print(f"Error: {e}")
             return -1
 
-    def addTimedIrrigation(self, name: str, description: str) -> int: 
+    def addTimedIrrigation(self, timedIrrigation) -> int: 
         try:
-            self.cur.execute("INSERT INTO bluefrog.TimedIrrigation (Name, Description) VALUES (?,?);", (name, description)) 
+            self.cur.execute("INSERT INTO bluefrog.TimedIrrigation (Name, Description) VALUES (?,?);", (timedIrrigation.getName(), TimedIrrigation.getDescription())) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
             print(f"Error: {e}")
             return -1
 
-    def addTimedIrrigationTimes(self, timedIrrigationFK: int, startTime: time, stopTime: time, daysToRun: str) -> int: 
+    def addTimedIrrigationTimes(self, irrigationTime) -> int: 
         try:
-            startTime = time.strftime("%H:%M:%S", startTime)
-            stopTime = time.strftime("%H:%M:%S", stopTime)
-            self.cur.execute("INSERT INTO bluefrog.TimedIrrigationTimes (TimedIrrigationFK, StartTime, StopTime, DaysToRun) VALUES (?,?,?);", (timedIrrigationFK, startTime, stopTime, daysToRun)) 
+            startTime = time.strftime("%H:%M:%S", irrigationTime.getStartTime())
+            stopTime = time.strftime("%H:%M:%S", irrigationTime.getStopTime())
+            self.cur.execute("INSERT INTO bluefrog.TimedIrrigationTimes (TimedIrrigationFK, StartTime, StopTime, DaysToRun) VALUES (?,?,?);", (irrigationTime.getFK(), startTime, stopTime, irrigationTime.getDaysToRun())) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
