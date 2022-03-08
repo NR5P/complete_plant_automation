@@ -1,9 +1,8 @@
 import time
 
 class TimedIrrigation():
-    def __init__(self, id, name, description, irrigationTimes = [], daysToRun):
+    def __init__(self, id, name, description, irrigationTimes = []):
         self.id = id
-        self.daysToRun = daysToRun
         self.description = description
         self.name = name
         self.irrigationTimes = irrigationTimes
@@ -25,7 +24,7 @@ class TimedIrrigation():
 
 
 class IrrigationTime():
-    def __init__(self, fk: int, startTime: time, stopTime: time, daysToRun: str):
+    def __init__(self, id: int, fk: int, startTime: time, stopTime: time, daysToRun: str):
         self.fk = fk
         self.startTime = startTime
         self.stopTime = stopTime
