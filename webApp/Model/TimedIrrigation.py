@@ -19,12 +19,12 @@ class TimedIrrigation():
     def getName(self) -> str:
         return self.name
 
-    def getIrrigationTimes(self) -> List[time]:
+    def getIrrigationTimes(self):
         return self.irrigationTimes
 
 
 class IrrigationTime():
-    def __init__(self, id: int, fk: int, startTime: time, stopTime: time, daysToRun: str):
+    def __init__(self, id: int, fk: int, startTime, stopTime, daysToRun: str):
         self.fk = fk
         self.startTime = startTime
         self.stopTime = stopTime

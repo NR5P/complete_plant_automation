@@ -17,7 +17,7 @@ class CycleIrrigation():
 
 
 class BlackoutTime():
-    def __init__(self, id, fk: int, blackoutStart: time, blackoutStop: time):
+    def __init__(self, id, fk: int, blackoutStart, blackoutStop):
         self.id = id
         self.fk = fk
         self.blackoutStart = blackoutStart
@@ -26,8 +26,8 @@ class BlackoutTime():
     def getFK(self) -> int:
         return self.fk
 
-    def getBlackoutStartTime(self) -> time:
+    def getBlackoutStartTime(self):
         return self.blackoutStart
 
-    def getBlackoutStopTime(self) -> time:
+    def getBlackoutStopTime(self):
         return self.blackoutStop

@@ -1,5 +1,7 @@
 import mariadb, sys, time
-from ..Model.CycleIrrigation import CycleIrrigation, BlackoutTime
+sys.path.append("..")
+from Model.CycleIrrigation import CycleIrrigation, BlackoutTime
+from Model.TimedIrrigation import TimedIrrigation, IrrigationTime
 
 class DB():
     def __init__(self):
@@ -34,9 +36,9 @@ class DB():
 
     def addCycleIrrigationBlackoutTimes(self, blackoutTimes) -> int: 
         try:
-            blackoutStart = time.strftime("%H:%M:%S", blackoutTimes.getBlackoutStartTime())
-            blackoutStop = time.strftime("%H:%M:%S", blackoutTimes.getBlackoutStopTime())
-            self.cur.execute("INSERT INTO bluefrog.CycleIrrigationBlackoutTimes (CycleIrrigationFK, BlackoutStart, BlackoutStop) VALUES (?,?,?);", (blackoutTimes.getFK(), blackoutStart, blackoutStop)) 
+            #blackoutStart = time.strftime("%H:%M:%S", blackoutTimes.getBlackoutStartTime())
+            #blackoutStop = time.strftime("%H:%M:%S", blackoutTimes.getBlackoutStopTime())
+            self.cur.execute("INSERT INTO bluefrog.CycleIrrigationBlackoutTimes (CycleIrrigationFK, BlackoutStart, BlackoutStop) VALUES (?,?,?);", (blackoutTimes.getFK(), blackoutTimes.getBlackoutStartTime(), blackoutTimes.getBlackoutStopTime())) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
@@ -45,7 +47,7 @@ class DB():
 
     def addTimedIrrigation(self, timedIrrigation) -> int: 
         try:
-            self.cur.execute("INSERT INTO bluefrog.TimedIrrigation (Name, Description) VALUES (?,?);", (timedIrrigation.getName(), TimedIrrigation.getDescription())) 
+            self.cur.execute("INSERT INTO bluefrog.TimedIrrigation (Name, Description) VALUES (?,?);", (timedIrrigation.getName(), timedIrrigation.getDescription())) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
@@ -54,9 +56,9 @@ class DB():
 
     def addTimedIrrigationTimes(self, irrigationTime) -> int: 
         try:
-            startTime = time.strftime("%H:%M:%S", irrigationTime.getStartTime())
-            stopTime = time.strftime("%H:%M:%S", irrigationTime.getStopTime())
-            self.cur.execute("INSERT INTO bluefrog.TimedIrrigationTimes (TimedIrrigationFK, StartTime, StopTime, DaysToRun) VALUES (?,?,?);", (irrigationTime.getFK(), startTime, stopTime, irrigationTime.getDaysToRun())) 
+            #startTime = time.strftime("%H:%M:%S", irrigationTime.getStartTime())
+            #stopTime = time.strftime("%H:%M:%S", irrigationTime.getStopTime())
+            self.cur.execute("INSERT INTO bluefrog.TimedIrrigationTimes (TimedIrrigationFK, StartTime, StopTime, DaysToRun) VALUES (?,?,?,?);", (irrigationTime.getFK(), irrigationTime.getStartTime(), irrigationTime.getStopTime(), irrigationTime.getDaysToRun())) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
@@ -65,17 +67,17 @@ class DB():
 
     def getCycleIrrigationBlackoutTimes(self, id: int):
         try:
-            self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigationBlackoutTimes AS t1 INNER JOIN CycleIrrigation WHERE t1.CycleIrrigationFK = ?;", (id,)) 
-            self.conn.commit()
+            self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigationBlackoutTimes AS t1 INNER JOIN CycleIrrigation AS t2 WHERE t1.CycleIrrigationFK = ?;", (id,)) 
             blackoutTimes = []
             cycledescription = ""
             cyclename = ""
-            for cycleID, Description, Name, blackoutID, BlackoutStart, BlackoutStop in self.cur:
+            #for cycleID, Description, Name, blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK in self.cur:
+            for blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK, cycleID, Description, Name in self.cur:
                 cycleid = cycleID
                 cycledescription = Description
                 cyclename = Name
-                BlackoutStart = time.strptime(BlackoutStart, "%H:%M:%S")
-                BlackoutStop = time.strptime(BlackoutStop, "%H:%M:%S")
+                #BlackoutStart = time.strptime(BlackoutStart, "%H:%M:%S")
+                #BlackoutStop = time.strptime(BlackoutStop, "%H:%M:%S")
                 blackoutTime = BlackoutTime(blackoutID, cycleID, BlackoutStart, BlackoutStop)
                 blackoutTimes.append(blackoutTime)
             cycleIrrigation = CycleIrrigation(id, cycledescription, cyclename, blackoutTimes) 
@@ -87,19 +89,18 @@ class DB():
     def getTimedIrrigationTimes(self, id: int):
         try:
             self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description FROM TimedIrrigationTimes AS t1 INNER JOIN TimedIrrigation AS t2 WHERE t1.TimedIrrigationFK = ?", (id,)) 
-            self.conn.commit()
             timedIrrigationTimes = []
             name = ""
             description = ""
-            for TimedTimesID, StartTime, StopTime, DaysToRun, TimeID, Name, Description in self.cur:
+            for TimedTimesID, TimedIrrigationFK, StartTime, StopTime, DaysToRun, TimeID, Name, Description in self.cur:
                 name = Name
                 description = Description
-                startTime = time.strptime(startTime, "%H:%M:%S")
-                stopTime = time.strptime(stopTime, "%H:%M:%S")
+                #startTime = time.strptime(startTime, "%H:%M:%S")
+                #stopTime = time.strptime(stopTime, "%H:%M:%S")
                 irrigationTime = IrrigationTime(TimedTimesID, TimedIrrigationFK, StartTime, StopTime, DaysToRun)
                 timedIrrigationTimes.append(irrigationTime)
-            TimedIrrigation = TimedIrrigation(id, Name, Description, timedIrrigationTimes) 
-            return TimedIrrigation
+            timedIrrigation = TimedIrrigation(id, Name, Description, timedIrrigationTimes) 
+            return timedIrrigation
         except mariadb.Error as e:
             print(f"Error: {e}")
             return -1
