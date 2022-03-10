@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request, flash, jsonify, redirect, url_for
 import sys, os, json
-from .jinja_filters import *
-from webApp.forms import ValveForm
-from webApp.db import DB
+from jinja_filters import *
+from db import DB
 db = DB()
 sys.path.append("/home/this/programming/complete_plant_automation")
 
@@ -25,6 +24,19 @@ def mainPage():
 @app.route("/settings", methods=['GET'])
 def settings():
     return render_template("settings.html")
+
+@app.route("/api/getallcycleirrigation", methods=['GET'])
+def returnAllCycleIrrigation():
+    """
+    returns all cycle components in json file
+    """
+    try:
+        cycleIrrigationComponents = db.getAllCycleIrrigationTimes()
+        cycleList = [x.toDict() for x in cycleIrrigationComponents]
+        return json.dumps(cycleList)
+    except Exception as e:
+        print(e)
+
 
 @app.route("/api", methods=['GET'])
 def returnAll():

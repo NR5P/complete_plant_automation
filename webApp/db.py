@@ -71,13 +71,10 @@ class DB():
             blackoutTimes = []
             cycledescription = ""
             cyclename = ""
-            #for cycleID, Description, Name, blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK in self.cur:
             for blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK, cycleID, Description, Name in self.cur:
                 cycleid = cycleID
                 cycledescription = Description
                 cyclename = Name
-                #BlackoutStart = time.strptime(BlackoutStart, "%H:%M:%S")
-                #BlackoutStop = time.strptime(BlackoutStop, "%H:%M:%S")
                 blackoutTime = BlackoutTime(blackoutID, cycleID, BlackoutStart, BlackoutStop)
                 blackoutTimes.append(blackoutTime)
             cycleIrrigation = CycleIrrigation(id, cycledescription, cyclename, blackoutTimes) 
@@ -85,6 +82,42 @@ class DB():
         except mariadb.Error as e:
             print(f"Error: {e}")
             return -1
+
+    def getAllCycleIrrigationTimes(self):
+        try:
+            self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigationBlackoutTimes AS t1 INNER JOIN CycleIrrigation AS t2 ORDER BY t1.CycleIrrigationFK;") 
+            blackoutTimesList = []
+            cycleIrrigationList = []
+            cycledescription = ""
+            cyclename = ""
+            cycleid = 0
+            oldFK = None
+            count = 0
+            for blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK, cycleID, Description, Name in self.cur:
+                if count != 0 and oldFK != CycleIrrigationFK:
+                    cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, blackoutTimesList) 
+                    cycleIrrigationList.append(cycleIrrigation)
+                    cycleid = 0
+                    cycledescription = ""
+                    cyclename = ""
+                    blackoutTimesList = []
+                oldFK = CycleIrrigationFK
+                cycleid = cycleID
+                cycledescription = Description
+                cyclename = Name
+                blackoutTime = BlackoutTime(blackoutID, cycleID, BlackoutStart, BlackoutStop)
+                blackoutTimesList.append(blackoutTime)
+                count+=1
+
+            if count > 0: 
+                cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, blackoutTimesList) 
+                cycleIrrigationList.append(cycleIrrigation)
+
+            return cycleIrrigationList
+        except mariadb.Error as e:
+            print(f"Error: {e}")
+            return -1
+
 
     def getTimedIrrigationTimes(self, id: int):
         try:

@@ -14,6 +14,9 @@ class CycleIrrigation():
     def getBlackoutTimes(self):
         return self.blackoutTimes
 
+    def toDict(self):
+        return {"id":self.id,"description":self.description,"name":self.name,"blackouttimes":[t.toDict() for t in self.blackoutTimes]}
+
 
 
 class BlackoutTime():
@@ -31,3 +34,6 @@ class BlackoutTime():
 
     def getBlackoutStopTime(self):
         return self.blackoutStop
+
+    def toDict(self):
+        return {"id":self.id,"blackoutStart":self.blackoutStart,"blackoutStop":self.blackoutStop}
