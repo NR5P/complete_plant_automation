@@ -1,10 +1,10 @@
 import time
+from .Device import Device
 
-class TimedIrrigation():
+class TimedIrrigation(Device):
     def __init__(self, id, name, description, irrigationTimes = []):
+        super().__init__(name, description)
         self.id = id
-        self.description = description
-        self.name = name
         self.irrigationTimes = irrigationTimes
 
     def getId(self) -> int:
@@ -12,12 +12,6 @@ class TimedIrrigation():
 
     def getDaysToRun(self) -> str:
         return self.daysToRun
-
-    def getDescription(self) -> str:
-        return self.description
-
-    def getName(self) -> str:
-        return self.name
 
     def getIrrigationTimes(self):
         return self.irrigationTimes

@@ -1,15 +1,10 @@
-class CycleIrrigation():
+from .Device import Device
+
+class CycleIrrigation(Device):
     def __init__(self, id: int, description: str, name: str, blackoutTimes = []):
+        super().__init__(name, description)
         self.id = id
-        self.description = description
-        self.name = name
         self.blackoutTimes = blackoutTimes
-
-    def getDescription(self):
-        return self.description
-
-    def getName(self):
-        return self.name
 
     def getBlackoutTimes(self):
         return self.blackoutTimes

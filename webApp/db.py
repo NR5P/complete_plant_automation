@@ -85,7 +85,7 @@ class DB():
 
     def getAllCycleIrrigationTimes(self):
         try:
-            self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigationBlackoutTimes AS t1 INNER JOIN CycleIrrigation AS t2 ORDER BY t1.CycleIrrigationFK;") 
+            self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id ORDER BY t1.CycleIrrigationFK, t2.id;") 
             blackoutTimesList = []
             cycleIrrigationList = []
             cycledescription = ""
@@ -94,7 +94,7 @@ class DB():
             oldFK = None
             count = 0
             for blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK, cycleID, Description, Name in self.cur:
-                if count != 0 and oldFK != CycleIrrigationFK:
+                if (count != 0 and oldFK != CycleIrrigationFK) or CycleIrrigationFK == None:
                     cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, blackoutTimesList) 
                     cycleIrrigationList.append(cycleIrrigation)
                     cycleid = 0
