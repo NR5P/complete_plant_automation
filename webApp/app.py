@@ -38,7 +38,7 @@ def returnAllCycleIrrigation():
         print(e)
 
 @app.route("/api/getalltimedirrigation", methods=['GET'])
-def returnAllCycleIrrigation():
+def returnAllTimedIrrigation():
     """
     returns all timed components
     """

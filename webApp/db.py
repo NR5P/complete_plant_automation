@@ -119,21 +119,38 @@ class DB():
             return -1
 
 
-    def getAllTimedIrrigationTimes(self, id: int):
+    def getAllTimedIrrigationTimes(self):
         try:
-            self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description FROM TimedIrrigationTimes AS t1 INNER JOIN TimedIrrigation AS t2 WHERE t1.TimedIrrigationFK = ?", (id,)) 
-            timedIrrigationTimes = []
+            self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description FROM TimedIrrigation AS t2 LEFT JOIN TimedIrrigationTimes AS t1 ON t1.TimedIrrigationFK = t2.id ORDER BY t1.TimedIrrigationFK, t2.id;") 
+            timedIrrigationTimesList = []
+            timedIrrigationList = []
             name = ""
             description = ""
+            timedID = 0
+            oldFK = None
+            count = 0
             for TimedTimesID, TimedIrrigationFK, StartTime, StopTime, DaysToRun, TimeID, Name, Description in self.cur:
+                if (count != 0 and oldFK != TimedIrrigationFK) or TimedIrrigationFK == None:
+                    timedIrrigation = TimedIrrigation(timedID, name, description, timedIrrigationTimesList)
+                    timedIrrigationList.append(timedIrrigation)
+                    timedID = 0
+                    description = ""
+                    name = ""
+                    timedIrrigationTimesList = []
+                oldFK = TimedIrrigationFK
+                timedID = TimeID
                 name = Name
                 description = Description
-                #startTime = time.strptime(startTime, "%H:%M:%S")
-                #stopTime = time.strptime(stopTime, "%H:%M:%S")
                 irrigationTime = IrrigationTime(TimedTimesID, TimedIrrigationFK, StartTime, StopTime, DaysToRun)
-                timedIrrigationTimes.append(irrigationTime)
-            timedIrrigation = TimedIrrigation(id, Name, Description, timedIrrigationTimes) 
-            return timedIrrigation
+                timedIrrigationTimesList.append(irrigationTime)
+                count+=1
+
+            if count > 0:
+                timedIrrigation = TimedIrrigation(timedID, name, description, timedIrrigationTimesList)
+                timedIrrigationList.append(timedIrrigation)
+
+
+            return timedIrrigationList
         except mariadb.Error as e:
             print(f"Error: {e}")
             return -1

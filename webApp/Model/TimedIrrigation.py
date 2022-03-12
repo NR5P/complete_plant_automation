@@ -15,9 +15,13 @@ class TimedIrrigation(Device):
     def getIrrigationTimes(self):
         return self.irrigationTimes
 
+    def toDict(self):
+        return {"id":self.id,"description":self.description,"name":self.name,"irrigationTimes":[t.toDict() for t in self.irrigationTimes]}
+
 
 class IrrigationTime():
     def __init__(self, id: int, fk: int, startTime, stopTime, daysToRun: str):
+        self.id = id
         self.fk = fk
         self.startTime = startTime
         self.stopTime = stopTime
@@ -34,3 +38,6 @@ class IrrigationTime():
 
     def getDaysToRun(self):
         return self.daysToRun
+
+    def toDict(self):
+        return {"id":self.id,"startTime":self.startTime,"stopTime":self.stopTime, "daysToRun":self.daysToRun}
