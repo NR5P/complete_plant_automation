@@ -2,8 +2,7 @@ from .Device import Device
 
 class CycleIrrigation(Device):
     def __init__(self, id: int, description: str, name: str, blackoutTimes = []):
-        super().__init__(name, description)
-        self.id = id
+        super().__init__(id, name, description)
         self.blackoutTimes = blackoutTimes
 
     def getBlackoutTimes(self):

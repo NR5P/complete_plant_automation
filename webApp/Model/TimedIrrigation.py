@@ -3,8 +3,7 @@ from .Device import Device
 
 class TimedIrrigation(Device):
     def __init__(self, id, name, description, irrigationTimes = []):
-        super().__init__(name, description)
-        self.id = id
+        super().__init__(id, name, description)
         self.irrigationTimes = irrigationTimes
 
     def getId(self) -> int:
