@@ -10,7 +10,6 @@ app.config["SECRET_KEY"] = "thisisasecretkey"
 
 app.jinja_env.filters['strf_time_converter'] = strf_time_converter
 app.jinja_env.filters['deltaToHrMinSec'] = deltaToMinSec
-
 app.jinja_env.filters["strftimeConverter"] = strf_time_converter
 app.jinja_env.filters["HrMinSec"] = deltaToHrMinSec
 app.jinja_env.filters["HrMin"] = deltaToHrMin
@@ -26,42 +25,37 @@ def settings():
     return render_template("settings.html")
 
 @app.route("/api/getallcycleirrigation", methods=['GET'])
-def returnAllCycleIrrigation():
+@app.route("/api/getallcycleirrigation/<int:id>", methods=['GET'])
+def returnAllCycleIrrigation(id = None):
     """
     returns all cycle components
     """
     try:
-        cycleIrrigationComponents = db.getAllCycleIrrigationTimes()
+        if id == None:
+            cycleIrrigationComponents = db.getAllCycleIrrigationTimes()
+        else:
+            cycleIrrigationComponents = db.getAllCycleIrrigationTimes(id)
         cycleList = [x.toDict() for x in cycleIrrigationComponents]
         return json.dumps(cycleList)
     except Exception as e:
         print(e)
 
 @app.route("/api/getalltimedirrigation", methods=['GET'])
-def returnAllTimedIrrigation():
+@app.route("/api/getalltimedirrigation/<int:id>", methods=['GET'])
+def returnAllTimedIrrigation(id = None):
     """
     returns all timed components
     """
     try:
-        timeIrrigationComponents = db.getAllTimedIrrigationTimes()
+        if id == None:
+            timeIrrigationComponents = db.getAllTimedIrrigationTimes()
+        else:
+            timeIrrigationComponents = db.getAllTimedIrrigationTimes(id)
         timedList = [x.toDict() for x in timeIrrigationComponents]
         return json.dumps(timedList)
     except Exception as e:
         print(e)
 
-
-
-@app.route("/api", methods=['GET'])
-def returnAll():
-    """
-    returns all components in json file
-    """
-    try:
-        with open("/home/pi/components.json", "r") as f:
-            data = json.load(f)
-        return jsonify(data)
-    except:
-        return "file aint working"
 
 @app.route("/api", methods=['POST'])
 def addToJson():
@@ -102,18 +96,6 @@ def removeJson(name):
 
     return redirect(url_for("returnAll"))
 
-@app.route("/api/<name>", methods=['GET'])
-def returnOneComponentType(name):
-    """
-    returns json data from file that is of type in url, dynamically obtained 
-    """
-    try:
-        with open("/home/pi/components.json", "r") as f:
-            data = json.load(f)
-    except:
-        return "file aint working"
-    component = [i for i in data if data["type"] == name]
-    return jsonify(component)
 
 @app.route("/addnew/<type>")
 def addNewComponent(type):
