@@ -56,8 +56,6 @@ class DB():
 
     def addTimedIrrigationTimes(self, irrigationTime) -> int: 
         try:
-            #startTime = time.strftime("%H:%M:%S", irrigationTime.getStartTime())
-            #stopTime = time.strftime("%H:%M:%S", irrigationTime.getStopTime())
             self.cur.execute("INSERT INTO bluefrog.TimedIrrigationTimes (TimedIrrigationFK, StartTime, StopTime, DaysToRun) VALUES (?,?,?,?);", (irrigationTime.getFK(), irrigationTime.getStartTime(), irrigationTime.getStopTime(), irrigationTime.getDaysToRun())) 
             self.conn.commit()
             return self.cur.lastrowid
@@ -83,9 +81,13 @@ class DB():
             print(f"Error: {e}")
             return -1
 
-    def getAllCycleIrrigationTimes(self):
+    def getAllCycleIrrigationTimes(self, passedID = None):
         try:
-            self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id ORDER BY t1.CycleIrrigationFK, t2.id;") 
+            if passedID == None:
+                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id ORDER BY t1.CycleIrrigationFK, t2.id;") 
+            else:
+                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id WHERE t2.id = ? ORDER BY t1.CycleIrrigationFK, t2.id;",(passedID,)) 
+
             blackoutTimesList = []
             cycleIrrigationList = []
             cycledescription = ""
@@ -119,9 +121,13 @@ class DB():
             return -1
 
 
-    def getAllTimedIrrigationTimes(self):
+    def getAllTimedIrrigationTimes(self, passedID = None):
         try:
-            self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description FROM TimedIrrigation AS t2 LEFT JOIN TimedIrrigationTimes AS t1 ON t1.TimedIrrigationFK = t2.id ORDER BY t1.TimedIrrigationFK, t2.id;") 
+            if passedID == None:
+                self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description FROM TimedIrrigation AS t2 LEFT JOIN TimedIrrigationTimes AS t1 ON t1.TimedIrrigationFK = t2.id ORDER BY t1.TimedIrrigationFK, t2.id;") 
+            else:
+                self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description FROM TimedIrrigation AS t2 LEFT JOIN TimedIrrigationTimes AS t1 ON t1.TimedIrrigationFK = t2.id WHERE t2.id = ? ORDER BY t1.TimedIrrigationFK, t2.id;",(passedID,)) 
+
             timedIrrigationTimesList = []
             timedIrrigationList = []
             name = ""
