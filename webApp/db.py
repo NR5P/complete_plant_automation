@@ -119,7 +119,7 @@ class DB():
             return -1
 
 
-    def getTimedIrrigationTimes(self, id: int):
+    def getAllTimedIrrigationTimes(self, id: int):
         try:
             self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description FROM TimedIrrigationTimes AS t1 INNER JOIN TimedIrrigation AS t2 WHERE t1.TimedIrrigationFK = ?", (id,)) 
             timedIrrigationTimes = []

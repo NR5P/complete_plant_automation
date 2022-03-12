@@ -28,7 +28,7 @@ def settings():
 @app.route("/api/getallcycleirrigation", methods=['GET'])
 def returnAllCycleIrrigation():
     """
-    returns all cycle components in json file
+    returns all cycle components
     """
     try:
         cycleIrrigationComponents = db.getAllCycleIrrigationTimes()
@@ -36,6 +36,19 @@ def returnAllCycleIrrigation():
         return json.dumps(cycleList)
     except Exception as e:
         print(e)
+
+@app.route("/api/getalltimedirrigation", methods=['GET'])
+def returnAllCycleIrrigation():
+    """
+    returns all timed components
+    """
+    try:
+        timeIrrigationComponents = db.getAllTimedIrrigationTimes()
+        timedList = [x.toDict() for x in timeIrrigationComponents]
+        return json.dumps(timedList)
+    except Exception as e:
+        print(e)
+
 
 
 @app.route("/api", methods=['GET'])
