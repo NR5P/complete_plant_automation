@@ -117,7 +117,7 @@ class DB():
 
             return cycleIrrigationList
         except mariadb.Error as e:
-            print(f"Error: {e}")
+            print(f"Error get all cycle irrigation: {e}")
             return -1
 
 

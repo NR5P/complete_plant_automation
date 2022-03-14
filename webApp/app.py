@@ -31,14 +31,18 @@ def returnAllCycleIrrigation(id = None):
     returns all cycle components
     """
     try:
-        if id == None:
-            cycleIrrigationComponents = db.getAllCycleIrrigationTimes()
-        else:
+        if id != None and id.isdigit():
             cycleIrrigationComponents = db.getAllCycleIrrigationTimes(id)
-        cycleList = [x.toDict() for x in cycleIrrigationComponents]
-        return json.dumps(cycleList)
+        else:
+            cycleIrrigationComponents = db.getAllCycleIrrigationTimes()
+        cycleList = []
+        if cycleIrrigationComponents != None and len(cycleIrrigationComponents) > 0:
+            cycleList = [x.toDict() for x in cycleIrrigationComponents]
+            return json.dumps(cycleList)
+        else:
+            return ""
     except Exception as e:
-        print(e)
+        print("exception returning cylcleList: " + str(e))
 
 @app.route("/api/getalltimedirrigation", methods=['GET'])
 @app.route("/api/getalltimedirrigation/<int:id>", methods=['GET'])

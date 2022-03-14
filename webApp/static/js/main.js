@@ -1,25 +1,30 @@
 
 window.onload = getAllComponents;
-let oldResponse;
+let oldResponseCycle;
+let oldResponseTimed;
 
 /* query api every second to refresh components list on main page*/
 let interval = setInterval(getAllComponents, 2000);
 
 /* get all components and put them on the main screen */
 function getAllComponents() {
+    getAllTimedIrrigation(getAllCycleIrrigation);
+}
+
+function getAllCycleIrrigation() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api', true);
+    xhr.open('GET', '/api/getallcycleirrigation', true);
     xhr.onload = function() {
         let output = "";
         if (this.status === 200) {
             const response = JSON.parse(this.responseText);
-            if (this.responseText !== oldResponse)
+            if (this.responseText !== oldResponseCycle)
             {
-                oldResponse = this.responseText;
+                oldResponseCycle = this.responseText;
                 response.forEach(element => {
                     output += `<button class="u-full-width accordian">${element.name}</button>
                             <div class="accordian-content">
-                                ${returnComponentSettings(element)}
+                                ${returnComponentSettings("cycleirrigation", element)}
                             </div>`;
                 });
                 document.getElementById("list-all-components").innerHTML = output;
@@ -29,7 +34,32 @@ function getAllComponents() {
     }
     xhr.send();
 }
-
+   
+function getAllTimedIrrigation(callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/getalltimedirrigation', true);
+    xhr.onload = function() {
+        let output = "";
+        if (this.status === 200) {
+            const response = JSON.parse(this.responseText);
+            if (this.responseText !== oldResponseTimed)
+            {
+                oldResponseTimed = this.responseText;
+                response.forEach(element => {
+                    output += `<button class="u-full-width accordian">${element.name}</button>
+                            <div class="accordian-content">
+                                ${returnComponentSettings("timedirrigation", element)}
+                            </div>`;
+                });
+                document.getElementById("list-all-components").innerHTML = output;
+                setUpAccordian();
+            }
+            callback();
+        }
+    }
+    xhr.send();
+}
+ 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 /* this is to hide and unhide accordians onclick in the main menu */
@@ -66,9 +96,9 @@ function convertFromIsoToTime(isoFormat){
 //////////////////////////////////////////////////////////////////////////////////////////
 
 /* takes component and returns the settings of the element depending on the componenet type */
-function returnComponentSettings(element) {
+function returnComponentSettings(type, element) {
     let output = "";
-    switch (element.componentType) {
+    switch (type) {
         case "cycleirrigation" :
             output += `
                        <div class="row">
@@ -77,7 +107,7 @@ function returnComponentSettings(element) {
                        </div>
                        <div class="row">
                         <button class="u-pull-left one-third column">Change Notes</button>
-                        <p class="u-pull-right two-thirds column">${element.notes}</p>
+                        <p class="u-pull-right two-thirds column">${element.description}</p>
                        </div>
                        <div class="row">
                         <button class="u-pull-left one-third column">Change Pin</button>
@@ -121,25 +151,8 @@ function returnComponentSettings(element) {
             return output;
         
         case "timedirrigation" :  
-
-            return output;
-        
-        case "fan" : 
-
             return output;
 
-        case "light" : 
-
-            return output;
-
-        case "heater" : 
-        
-            return output;
-
-        case "humidifier" : 
-
-            return output;
-    
         default:
             return "there was a problem here";
     }
