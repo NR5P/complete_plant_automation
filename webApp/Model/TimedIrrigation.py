@@ -2,8 +2,8 @@ import time
 from .Device import Device
 
 class TimedIrrigation(Device):
-    def __init__(self, id, name, description, irrigationTimes = []):
-        super().__init__(id, name, description)
+    def __init__(self, id, name, description, pin, onoff, irrigationTimes = []):
+        super().__init__(id, name, description, pin, onoff)
         self.irrigationTimes = irrigationTimes
 
     def getId(self) -> int:
@@ -16,7 +16,7 @@ class TimedIrrigation(Device):
         return self.irrigationTimes
 
     def toDict(self):
-        return {"id":self.id,"description":self.description,"name":self.name,"irrigationTimes":[t.toDict() for t in self.irrigationTimes]}
+        return {"id":self.id,"description":self.description,"name":self.name,"pin":self.pin,"onoff":self.onoff,"irrigationTimes":[t.toDict() for t in self.irrigationTimes]}
 
 
 class IrrigationTime():

@@ -23,7 +23,7 @@ function getAllCycleIrrigation() {
                 oldResponseCycle = this.responseText;
                 response.forEach(element => {
                     output += `<button class="u-full-width accordian">${element.name}</button>
-                            <div class="accordian-content">
+                            <div class="accordian-content" id="element-id-${element.id}">
                                 ${returnComponentSettings("cycleirrigation", element)}
                             </div>`;
                 });
@@ -47,7 +47,7 @@ function getAllTimedIrrigation(callback) {
                 oldResponseTimed = this.responseText;
                 response.forEach(element => {
                     output += `<button class="u-full-width accordian">${element.name}</button>
-                            <div class="accordian-content">
+                            <div class="accordian-content" id="element-id-${element.id}">
                                 ${returnComponentSettings("timedirrigation", element)}
                             </div>`;
                 });
@@ -90,7 +90,7 @@ dynamic for either 24 or 12 hour formats
 function convertFromIsoToTime(isoFormat){
     //const time = new Date(isoFormat);
     //return time.prototype.getHours() + " : " + time.prototype.getMinutes;
-    return "";
+    return isoFormat;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -101,52 +101,63 @@ function returnComponentSettings(type, element) {
     switch (type) {
         case "cycleirrigation" :
             output += `
+                    <div>
                        <div class="row">
-                        <button class="u-pull-left one-third column">Change Name</button>
+                        <label class="u-pull-left one-third column">Name</label>
                         <h4 class="u-pull-right two-thirds column">${element.name}</h4>
                        </div>
                        <div class="row">
-                        <button class="u-pull-left one-third column">Change Notes</button>
-                        <p class="u-pull-right two-thirds column">${element.description}</p>
+                        <label class="u-pull-left one-third column">description</label>
+                        <h4 class="u-pull-right two-thirds column">${element.description}</h4>
                        </div>
                        <div class="row">
-                        <button class="u-pull-left one-third column">Change Pin</button>
+                        <label class="u-pull-left one-third column">Pin</label>
                         <h4 class="u-pull-right two-thirds column">${element.pin}</h4>
                        </div>
                        <div class="row">
-                        <button class="u-pull-left one-third column">On or Off</button>
+                        <label class="u-pull-left one-third column">On or Off</label>
                         <h4 class="u-pull-right two-thirds column">
                             ${element.on ? "ON" : "OFF"}
                         </h4>
                        </div>
                        <div class="row">
-                        <button class="u-pull-left one-third column">Change Pin</button>
+                        <label class="u-pull-left one-third column">Current State</label>
                         <h4 class="u-pull-right two-thirds column">
                             ${element.currentstate ? "Currently Running" : "Currently Off"}
                         </h4>
                        </div>
                        <div class="row">
-                        <button class="u-pull-left one-third column">Cycle On Time</button>
+                        <label class="u-pull-left one-third column">Cycle On Time</label>
                         <h4 class="u-pull-right two-thirds column">${element.cycleOnMinutes}:${element.cycleOnSeconds}</h4> 
                        </div>
                        <div class="row">
-                        <button class="u-pull-left one-third column">Cycle Off Time</button>
+                        <label class="u-pull-left one-third column">Cycle Off Time</label>
                         <h4 class="u-pull-right two-thirds column">${element.cycleOffMinutes}:${element.cycleOffSeconds}</h4> 
+                       </div>`
+
+                    element.blackouttimes.forEach(time => {
+                        output += `
+                            <div class="time-block">
+                                <div class="row">
+                                    <label class="u-pull-left one-third column">Blackout Start Time</label>
+                                    <h4 class="u-pull-right two-thirds column">${convertFromIsoToTime(time.blackoutStart)}</h4> 
+                                </div>
+                                <div class="row">
+                                    <label class="u-pull-left one-third column">Blackout Stop Time</label>
+                                    <h4 class="u-pull-right two-thirds column">${convertFromIsoToTime(time.blackoutStop)}</h4> 
+                                </div>
+                            </div>
+                        `
+                    })                       
+
+                    output+=`
+                       <div class="row">
+                        <button class="u-full-width edit-btn">Edit</button>
                        </div>
                        <div class="row">
-                        <button class="u-pull-left one-third column">Blackout Start Time</button>
-                        <h4 class="u-pull-right two-thirds column">${convertFromIsoToTime(element.blackoutStartTime)}</h4> 
+                        <button id="delete-btn" class="u-full-width delete-btn">Delete</button>
                        </div>
-                       <div class="row">
-                        <button class="u-pull-left one-third column">Blackout Stop Time</button>
-                        <h4 class="u-pull-right two-thirds column">${convertFromIsoToTime(element.blackoutStopTime)}</h4> 
-                       </div>
-                       <div class="row">
-                        <button id="delete-btn" class="u-full-width">Delete</button>
-                       </div>
-                       <div class="row">
-                        <button class="u-full-width">Test</button>
-                       </div>
+                    </div>
                        `
             return output;
         

@@ -27,7 +27,7 @@ class DB():
 
     def addCycleIrrigation(self, cycleIrrigation) -> int: 
         try:
-            self.cur.execute("INSERT INTO bluefrog.CycleIrrigation (Description, Name) VALUES (?,?);", (cycleIrrigation.getDescription(), cycleIrrigation.getName())) 
+            self.cur.execute("INSERT INTO bluefrog.CycleIrrigation (Description, Name, pin, onoff) VALUES (?,?,?,?);", (cycleIrrigation.getDescription(), cycleIrrigation.getName(), cycleIrrigation.getPin(), cycleIrrigation.getOnoff())) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
@@ -47,7 +47,7 @@ class DB():
 
     def addTimedIrrigation(self, timedIrrigation) -> int: 
         try:
-            self.cur.execute("INSERT INTO bluefrog.TimedIrrigation (Name, Description) VALUES (?,?);", (timedIrrigation.getName(), timedIrrigation.getDescription())) 
+            self.cur.execute("INSERT INTO bluefrog.TimedIrrigation (Name, Description, pin, onoff) VALUES (?,?,?,?);", (timedIrrigation.getName(), timedIrrigation.getDescription(), timedIrrigation.getPin(), timedIrrigation.getOnoff())) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
@@ -63,56 +63,44 @@ class DB():
             print(f"Error: {e}")
             return -1
 
-    def getCycleIrrigationBlackoutTimes(self, id: int):
-        try:
-            self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigationBlackoutTimes AS t1 INNER JOIN CycleIrrigation AS t2 WHERE t1.CycleIrrigationFK = ?;", (id,)) 
-            blackoutTimes = []
-            cycledescription = ""
-            cyclename = ""
-            for blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK, cycleID, Description, Name in self.cur:
-                cycleid = cycleID
-                cycledescription = Description
-                cyclename = Name
-                blackoutTime = BlackoutTime(blackoutID, cycleID, BlackoutStart, BlackoutStop)
-                blackoutTimes.append(blackoutTime)
-            cycleIrrigation = CycleIrrigation(id, cycledescription, cyclename, blackoutTimes) 
-            return cycleIrrigation
-        except mariadb.Error as e:
-            print(f"Error: {e}")
-            return -1
-
     def getAllCycleIrrigationTimes(self, passedID = None):
         try:
             if passedID == None:
-                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id ORDER BY t1.CycleIrrigationFK, t2.id;") 
+                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name, t2.pin, t2.onoff FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id ORDER BY t1.CycleIrrigationFK, t2.id;") 
             else:
-                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id WHERE t2.id = ? ORDER BY t1.CycleIrrigationFK, t2.id;",(passedID,)) 
+                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name, t2.pin, t2.onoff FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id WHERE t2.id = ? ORDER BY t1.CycleIrrigationFK, t2.id;",(passedID,)) 
 
             blackoutTimesList = []
             cycleIrrigationList = []
             cycledescription = ""
             cyclename = ""
+            pin = None
+            onoff = False
             cycleid = 0
             oldFK = None
             count = 0
-            for blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK, cycleID, Description, Name in self.cur:
+            for blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK, cycleID, Description, Name, pin, onoff in self.cur:
                 if (count != 0 and oldFK != CycleIrrigationFK) or CycleIrrigationFK == None:
-                    cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, blackoutTimesList) 
+                    cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, pin, onoff, blackoutTimesList) 
                     cycleIrrigationList.append(cycleIrrigation)
                     cycleid = 0
                     cycledescription = ""
                     cyclename = ""
+                    pin = None
+                    onoff = False
                     blackoutTimesList = []
                 oldFK = CycleIrrigationFK
                 cycleid = cycleID
                 cycledescription = Description
+                pin = pin
+                onoff = onoff
                 cyclename = Name
                 blackoutTime = BlackoutTime(blackoutID, cycleID, BlackoutStart, BlackoutStop)
                 blackoutTimesList.append(blackoutTime)
                 count+=1
 
             if count > 0: 
-                cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, blackoutTimesList) 
+                cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, pin, onoff, blackoutTimesList) 
                 cycleIrrigationList.append(cycleIrrigation)
 
             return cycleIrrigationList
@@ -124,35 +112,41 @@ class DB():
     def getAllTimedIrrigationTimes(self, passedID = None):
         try:
             if passedID == None:
-                self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description FROM TimedIrrigation AS t2 LEFT JOIN TimedIrrigationTimes AS t1 ON t1.TimedIrrigationFK = t2.id ORDER BY t1.TimedIrrigationFK, t2.id;") 
+                self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description, t2.pin, t2.onoff FROM TimedIrrigation AS t2 LEFT JOIN TimedIrrigationTimes AS t1 ON t1.TimedIrrigationFK = t2.id ORDER BY t1.TimedIrrigationFK, t2.id;") 
             else:
-                self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description FROM TimedIrrigation AS t2 LEFT JOIN TimedIrrigationTimes AS t1 ON t1.TimedIrrigationFK = t2.id WHERE t2.id = ? ORDER BY t1.TimedIrrigationFK, t2.id;",(passedID,)) 
+                self.cur.execute("SELECT t1.id AS TimedTimesID, t1.TimedIrrigationFK, t1.StartTime, t1.StopTime, t1.DaysToRun, t2.id As TimeID, t2.Name, t2.Description, t2.pin, t2.onoff FROM TimedIrrigation AS t2 LEFT JOIN TimedIrrigationTimes AS t1 ON t1.TimedIrrigationFK = t2.id WHERE t2.id = ? ORDER BY t1.TimedIrrigationFK, t2.id;",(passedID,)) 
 
             timedIrrigationTimesList = []
             timedIrrigationList = []
             name = ""
             description = ""
+            pin = None
+            onoff = False
             timedID = 0
             oldFK = None
             count = 0
-            for TimedTimesID, TimedIrrigationFK, StartTime, StopTime, DaysToRun, TimeID, Name, Description in self.cur:
+            for TimedTimesID, TimedIrrigationFK, StartTime, StopTime, DaysToRun, TimeID, Name, Description, pin, onoff in self.cur:
                 if (count != 0 and oldFK != TimedIrrigationFK) or TimedIrrigationFK == None:
-                    timedIrrigation = TimedIrrigation(timedID, name, description, timedIrrigationTimesList)
+                    timedIrrigation = TimedIrrigation(timedID, name, description, pin, onoff, timedIrrigationTimesList)
                     timedIrrigationList.append(timedIrrigation)
                     timedID = 0
                     description = ""
+                    pin = None
+                    onoff = False
                     name = ""
                     timedIrrigationTimesList = []
                 oldFK = TimedIrrigationFK
                 timedID = TimeID
                 name = Name
                 description = Description
+                pin = pin
+                onoff = onoff
                 irrigationTime = IrrigationTime(TimedTimesID, TimedIrrigationFK, StartTime, StopTime, DaysToRun)
                 timedIrrigationTimesList.append(irrigationTime)
                 count+=1
 
             if count > 0:
-                timedIrrigation = TimedIrrigation(timedID, name, description, timedIrrigationTimesList)
+                timedIrrigation = TimedIrrigation(timedID, name, description, pin, onoff, timedIrrigationTimesList)
                 timedIrrigationList.append(timedIrrigation)
 
 

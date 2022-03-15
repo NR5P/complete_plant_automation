@@ -1,15 +1,15 @@
 from .Device import Device
 
 class CycleIrrigation(Device):
-    def __init__(self, id: int, description: str, name: str, blackoutTimes = []):
-        super().__init__(id, name, description)
+    def __init__(self, id: int, description: str, name: str, pin: int, onoff: bool, blackoutTimes = []):
+        super().__init__(id, name, description, pin, onoff)
         self.blackoutTimes = blackoutTimes
 
     def getBlackoutTimes(self):
         return self.blackoutTimes
 
     def toDict(self):
-        return {"id":self.id,"description":self.description,"name":self.name,"blackouttimes":[t.toDict() for t in self.blackoutTimes]}
+        return {"id":self.id,"description":self.description,"name":self.name,"pin":self.pin,"onoff":self.onoff,"blackouttimes":[t.toDict() for t in self.blackoutTimes]}
 
 
 

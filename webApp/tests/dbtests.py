@@ -7,7 +7,7 @@ from db import DB
 
 class TestDBMethods(unittest.TestCase):
     def test_addCycleIrrigation(self):
-        cycleIrrigation = CycleIrrigation(0, "test description", "test name")
+        cycleIrrigation = CycleIrrigation(0, "test description", "test name", 1, False)
         db = DB()
         returnval = db.addCycleIrrigation(cycleIrrigation)
         self.assertGreater(returnval, -1)
@@ -19,7 +19,7 @@ class TestDBMethods(unittest.TestCase):
         self.assertGreater(returnval, -1)
 
     def test_addTimedIrrigation(self):
-        timedIrrigation = TimedIrrigation(0, "test name", "test description")
+        timedIrrigation = TimedIrrigation(0, "test name", "test description", 1, False)
         db = DB()
         returnval = db.addTimedIrrigation(timedIrrigation)
         self.assertGreater(returnval, -1)
@@ -29,22 +29,6 @@ class TestDBMethods(unittest.TestCase):
         db = DB()
         returnval = db.addTimedIrrigationTimes(irrigationTime)
         self.assertGreater(returnval, -1)
-
-    def test_getCycleIrrigationBlackoutTimesName(self):
-        db = DB()
-        cycleIrrigation = db.getCycleIrrigationBlackoutTimes(16)
-        self.assertEqual("test name", cycleIrrigation.getName())
-        #self.assertEqual("test description", cycleIrrigation.getDescription())
-
-    def test_getTimedIrrigationTimesName(self):
-        db = DB()
-        timedIrrigation = db.getTimedIrrigationTimes(1)
-        self.assertEqual("test name", timedIrrigation.getName())
-
-    def test_getTimedIrrigationTimesDescription(self):
-        db = DB()
-        timedIrrigation = db.getTimedIrrigationTimes(1)
-        self.assertEqual("test description", timedIrrigation.getDescription())
 
 if __name__ == '__main__':
     unittest.main()
