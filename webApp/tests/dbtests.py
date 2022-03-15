@@ -7,7 +7,7 @@ from db import DB
 
 class TestDBMethods(unittest.TestCase):
     def test_addCycleIrrigation(self):
-        cycleIrrigation = CycleIrrigation(0, "test description", "test name", 1, False)
+        cycleIrrigation = CycleIrrigation(0, "test description", "test name", 1, False, "44:44:44", "55:55:55")
         db = DB()
         returnval = db.addCycleIrrigation(cycleIrrigation)
         self.assertGreater(returnval, -1)

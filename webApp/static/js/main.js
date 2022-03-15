@@ -117,7 +117,7 @@ function returnComponentSettings(type, element) {
                        <div class="row">
                         <label class="u-pull-left one-third column">On or Off</label>
                         <h4 class="u-pull-right two-thirds column">
-                            ${element.on ? "ON" : "OFF"}
+                            ${element.onoff ? "ON" : "OFF"}
                         </h4>
                        </div>
                        <div class="row">

@@ -27,7 +27,7 @@ class DB():
 
     def addCycleIrrigation(self, cycleIrrigation) -> int: 
         try:
-            self.cur.execute("INSERT INTO bluefrog.CycleIrrigation (Description, Name, pin, onoff) VALUES (?,?,?,?);", (cycleIrrigation.getDescription(), cycleIrrigation.getName(), cycleIrrigation.getPin(), cycleIrrigation.getOnoff())) 
+            self.cur.execute("INSERT INTO bluefrog.CycleIrrigation (Description, Name, pin, onoff, cycleOnTime, cycleOffTime) VALUES (?,?,?,?,?,?);", (cycleIrrigation.getDescription(), cycleIrrigation.getName(), cycleIrrigation.getPin(), cycleIrrigation.getOnoff(), cycleIrrigation.getCycleOnTime(), cycleIrrigation.getCycleOffTime())) 
             self.conn.commit()
             return self.cur.lastrowid
         except mariadb.Error as e:
@@ -66,26 +66,30 @@ class DB():
     def getAllCycleIrrigationTimes(self, passedID = None):
         try:
             if passedID == None:
-                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name, t2.pin, t2.onoff FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id ORDER BY t1.CycleIrrigationFK, t2.id;") 
+                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name, t2.pin, t2.onoff, t2.cycleOnTime, t2.cycleOffTime FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id ORDER BY t1.CycleIrrigationFK, t2.id;") 
             else:
-                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name, t2.pin, t2.onoff FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id WHERE t2.id = ? ORDER BY t1.CycleIrrigationFK, t2.id;",(passedID,)) 
+                self.cur.execute("SELECT t1.id AS blackoutID, t1.BlackoutStart, t1.BlackoutStop, t1.CycleIrrigationFK, t2.id AS cycleID, t2.Description, t2.Name, t2.pin, t2.onoff, t2.cycleOnTime, t2.cycleOffTime FROM CycleIrrigation AS t2 LEFT JOIN CycleIrrigationBlackoutTimes AS t1 ON t1.CycleIrrigationFK = t2.id WHERE t2.id = ? ORDER BY t1.CycleIrrigationFK, t2.id;",(passedID,)) 
 
             blackoutTimesList = []
             cycleIrrigationList = []
             cycledescription = ""
             cyclename = ""
+            cycleOnTime = ""
+            cycleOffTime = ""
             pin = None
             onoff = False
             cycleid = 0
             oldFK = None
             count = 0
-            for blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK, cycleID, Description, Name, pin, onoff in self.cur:
+            for blackoutID, BlackoutStart, BlackoutStop, CycleIrrigationFK, cycleID, Description, Name, pin, onoff, cycleOnTime, cycleOffTime in self.cur:
                 if (count != 0 and oldFK != CycleIrrigationFK) or CycleIrrigationFK == None:
-                    cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, pin, onoff, blackoutTimesList) 
+                    cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, pin, onoff, cycleOnTime, cycleOffTime, blackoutTimesList) 
                     cycleIrrigationList.append(cycleIrrigation)
                     cycleid = 0
                     cycledescription = ""
                     cyclename = ""
+                    cycleOnTime = ""
+                    cycleOffTime = ""
                     pin = None
                     onoff = False
                     blackoutTimesList = []
@@ -95,12 +99,14 @@ class DB():
                 pin = pin
                 onoff = onoff
                 cyclename = Name
+                cycleOnTime = cycleOnTime
+                cycleOffTime = cycleOffTime
                 blackoutTime = BlackoutTime(blackoutID, cycleID, BlackoutStart, BlackoutStop)
                 blackoutTimesList.append(blackoutTime)
                 count+=1
 
             if count > 0: 
-                cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, pin, onoff, blackoutTimesList) 
+                cycleIrrigation = CycleIrrigation(cycleid, cycledescription, cyclename, pin, onoff, cycleOnTime, cycleOffTime, blackoutTimesList) 
                 cycleIrrigationList.append(cycleIrrigation)
 
             return cycleIrrigationList
