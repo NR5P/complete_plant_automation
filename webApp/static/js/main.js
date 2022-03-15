@@ -128,11 +128,11 @@ function returnComponentSettings(type, element) {
                        </div>
                        <div class="row">
                         <label class="u-pull-left one-third column">Cycle On Time</label>
-                        <h4 class="u-pull-right two-thirds column">${element.cycleOnMinutes}:${element.cycleOnSeconds}</h4> 
+                        <h4 class="u-pull-right two-thirds column">${element.cycleOnTime}</h4> 
                        </div>
                        <div class="row">
                         <label class="u-pull-left one-third column">Cycle Off Time</label>
-                        <h4 class="u-pull-right two-thirds column">${element.cycleOffMinutes}:${element.cycleOffSeconds}</h4> 
+                        <h4 class="u-pull-right two-thirds column">${element.cycleOffTime}</h4> 
                        </div>`
 
                     element.blackouttimes.forEach(time => {

@@ -2,43 +2,61 @@
 
 {% block content %}
 
-<form action="/api" method="GET">
-    <h4>Name</h4>
-    <input type="text" name="name"/>
+<form action="/addnew/cycleirrigation" method="POST">
+    <div class="row">
+        <h4 class="u-pull-left">Name</h4>
+        <input type="text" class="u-pull-right" name="name"/>
+    </div>
 
-    <h4>Notes</h4>
-    <textarea name="Notes"></textarea>
+    <div class="row">
+        <h4 class="u-pull-left">Notes</h4>
+        <textarea name="Notes" class="u-pull-right"></textarea>
+    </div>
 
-    <h4>Pin</h4>
-    <select name="pin">
-        <option value="1">1</option>
-        <option value="2">2</option>
-    </select>
+    <div class="row">
+        <h4 class="u-pull-left">Pin</h4>
+        <select name="pin" class="u-pull-right">
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select>
+    </div>
 
     <!--change this with javascript to add 24 hours-->
-    <h4>Cycle On Time min:sec</h4>
-    <select name="hours">
-        <option value="1"></option>
-    </select>
-    <span>:</span>
-    <select name="hours">
-        <option value="1"></option>
-    </select>
+    <div class="row">
+        <h4 class="u-pull-left">Cycle On Time min:sec</h4>
+        <span class="u-pull-right">
+            <select name="hours">
+                <option value="1"></option>
+            </select>
+            <span>:</span>
+            <select name="hours">
+                <option value="1"></option>
+            </select>
+        </span>
+    </div>
 
-    <h4>Cycle Off Time min:sec</h4>
-    <select name="minutes">
-        <option value="1"></option>
-    </select>
-    <span>:</span>
-    <select name="minutes">
-        <option value="1"></option>
-    </select>
+    <div class="row">
+        <h4 class="u-pull-left">Cycle Off Time min:sec</h4>
+        <span class="u-pull-right">
+            <select name="minutes">
+                <option value="1"></option>
+            </select>
+            <span>:</span>
+            <select name="minutes">
+                <option value="1"></option>
+            </select>
+        </span>
+    </div>
 
-    <h4>Blackout Start Time</h4>
-    <input type="time" name="blackoutStartTime">
+    <div class="row">
+        <h4 class="u-pull-left">Blackout Start Time</h4>
+        <input type="time" class="u-pull-right" name="blackoutStartTime">
+    </div>
 
-    <h4>Blackout Stop Time</h4>
-    <input type="time" name="blackoutStopTime">
+    <div class="row">
+        <h4 class="u-pull-left">Blackout Stop Time</h4>
+        <input type="time" class="u-pull-right" name="blackoutStopTime">
+    </div>
 
     <!--adjust in javascript to turn on and off with click, also
     change color with click e.g red off and green on-->

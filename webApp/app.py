@@ -60,48 +60,7 @@ def returnAllTimedIrrigation(id = None):
     except Exception as e:
         print(e)
 
-
-@app.route("/api", methods=['POST'])
-def addToJson():
-    if request.json["type"] == "cycleirrigation":
-        CycleIrrigation.addToJson(request)
-    elif request.json["type"] == "irrigationvalve":
-        IrrigationValve.addToJson(request)
-
-    # return all of the componenents
-    return redirect(url_for("returnAll")) 
-
-@app.route("/api/<name>", methods=['PUT'])
-def updateJson(name):
-    if request.json["type"] == "cycleirrigation":
-        CycleIrrigation.updateJson(request, name)
-    elif request.json["type"] == "irrigationvalve":
-        IrrigationValve.updateJson(request, name)
-
-    # return all of the componenents
-    return redirect(url_for("returnAll")) 
-
-@app.route("/api/<name>", methods=['DELETE'])
-def removeJson(name):
-    try:
-        with open("/home/pi/components.json", "r") as f:
-            data = json.load(f) # load the json file into a dictionary
-    except:
-        pass
-
-    component = [i for i in data if data["name"] == name]
-    data.remove(component[0])
-
-    # write the dictionary to json file
-    jsonData = json.dumps(data, default=str)
-    jsonFile = open("/home/pi/components.json", "w")
-    jsonFile.write(jsonData)
-    jsonFile.close()
-
-    return redirect(url_for("returnAll"))
-
-
-@app.route("/addnew/<type>")
+@app.route("/addnew/<type>", methods=['GET'])
 def addNewComponent(type):
     """
     for adding new components.
@@ -110,6 +69,17 @@ def addNewComponent(type):
         return render_template("addcycleirrigation.html")
     elif (type == "timedirrigation"):
         return render_template("addtimedirrigation.html")
+
+@app.route("/addnew/<type>", methods=['POST'])
+def addNewComponentPost(type):
+    """
+    for adding new components.
+    """
+    if (type == "cycleirrigation"):
+        return render_template("main.html")
+    elif (type == "timedirrigation"):
+        return render_template("main.html")
+
 
 def startApp():
     app.run(host='0.0.0.0',port=5000)
